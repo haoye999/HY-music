@@ -6,7 +6,7 @@ const app = express();
 app.use(history());
 app.use(express.static(path.join(__dirname, 'dist')));
 
-const port = 8080;
+const port = 3001;
 
 app.server = app.listen(port, () => {
   console.log(`server running @ http://localhost:${port}`);
