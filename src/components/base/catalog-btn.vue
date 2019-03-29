@@ -9,10 +9,12 @@
 export default {
   name: 'catalog-btn',
   props: {
-    title: String,
-    default: '分类',
+    title: {
+      type: String,
+      default: '分类'
+    }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -35,7 +37,7 @@ export default {
     padding-top: 10px;
     flex-grow: 1;
     font-size: @font-size-small-x;
-    letter-spacing: .8px;
+    letter-spacing: 1px;
   }
 }
 </style>

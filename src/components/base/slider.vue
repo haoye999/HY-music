@@ -14,12 +14,12 @@ import BScroll from 'better-scroll';
 import lodash from 'lodash';
 
 export default {
-  name: "Slider",
+  name: 'Slider',
   data() {
     return {
       dots: 0,
-      currentPageIndex: 0,
-    }
+      currentPageIndex: 0
+    };
   },
   props: {
     loop: {
@@ -48,17 +48,17 @@ export default {
       window.addEventListener('resize', _.debounce(() => {
         this._setSliderWidth(true);
         this.slider.refresh();
-      },300));
-    })
+      }, 300));
+    });
   },
   methods: {
     _setSliderWidth(isResize) {
       this.children = this.$refs.sliderGroup.children;
       let width = 0;
-      let sliderWidth = this.$refs.slider.clientWidth;
+      const sliderWidth = this.$refs.slider.clientWidth;
       for (let i = 0; i < this.children.length; i++) {
         this.children[i].classList.add('slider-item');
-        this.children[i].style.width = sliderWidth + 'px';
+        this.children[i].style.width = `${sliderWidth}px`;
         width += sliderWidth;
       }
 
@@ -67,7 +67,7 @@ export default {
         width += sliderWidth * 2;
       }
 
-      this.$refs.sliderGroup.style.width = width + 'px';
+      this.$refs.sliderGroup.style.width = `${width}px`;
     },
     _initSlider() {
       this.slider = new BScroll(this.$refs.slider, {
@@ -77,18 +77,18 @@ export default {
         snap: {
           loop: this.loop,
           threshold: 0.3,
-          speed: 400,
-        },
+          speed: 400
+        }
       });
 
       this.slider.on('scrollEnd', () => {
-        let pageIndex = this.slider.getCurrentPage().pageX;
+        const pageIndex = this.slider.getCurrentPage().pageX;
         this.currentPageIndex = pageIndex;
 
         if (this.autoPlay) {
-          this._play()
+          this._play();
         }
-      })
+      });
     },
     _initDots() {
       this.dots = this.children.length;

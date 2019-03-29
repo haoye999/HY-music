@@ -1,0 +1,18 @@
+// 根路由动画
+.root-router-fade-enter-active, .root-router-fade-leave-active {
+  transition: opacity .1s ease-out, transform .1s;
+}
+.root-router-fade-enter, .root-router-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+// 歌手详情页动画
+.singer-detail-router-fade-enter-active, .singer-detail-router-fade-leave-active {
+  transition: all .2s;
+}
+
+.singer-detail-router-fade-enter, .singer-detail-router-fade-leave-to {
+  transform: translate(100%, 0) scale(0);
+  opacity: 0;
+}

@@ -3,12 +3,13 @@
     <div ref="imgContent" class="img-content">
       <img v-lazy="imgSrc" alt="封面">
       <div class="mask"></div>
-      <div class="play-count">
+      <div class="play-count" v-if="info.playCount || info.playcount">
         <i class="iconfont icon-listen icon"></i>
         <span class="count">{{ playCount }}</span>
       </div>
     </div>
     <h3 class="title" v-html="info.name"></h3>
+    <h4 class="author-name" v-if="info.artist" v-html="info.artist.name"></h4>
   </div>
 </template>
 
@@ -17,17 +18,17 @@ export default {
   name: 'preview-info',
   data() {
     return {
-      imgWidth: 140,
-    }
+      imgWidth: 140
+    };
   },
   props: {
     info: {
-      type: Object,
+      type: Object
     }
   },
   computed: {
     playCount() {
-      return `${parseInt(Math.ceil(this.info.playCount / 1e4))}万`;
+      return `${parseInt(Math.ceil((this.info.playcount ? this.info.playcount : this.info.playCount) / 1e4))}万`;
     },
     imgSrc() {
       return `${this.info.picUrl}?param=${this.imgWidth}y${this.imgWidth}&type=webp`;
@@ -36,17 +37,17 @@ export default {
   mounted() {
     this.imgWidth = this.$refs.imgContent.clientWidth;
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
 @import '~assets/style/variable.less';
 
 .preview-info {
-  padding: 1.5px;
+  padding: 5px;
   margin-top: 8px;
   .img-content {
-    border-radius: 3px;
+    border-radius: 5px;
     overflow: hidden;
     position: relative;
     img {
@@ -76,10 +77,12 @@ export default {
     }
   }
   .title {
-    padding: 10px 0 10px 0;
-    font-size: @font-size-small-m;
+    padding: 10px 0 5px 0;
+    font-size: @font-size-small-x;
     line-height: @font-size-medium;
-    letter-spacing: 1px;
+  }
+  .author-name {
+    font-size: @font-size-small-s;
   }
 }
 </style>

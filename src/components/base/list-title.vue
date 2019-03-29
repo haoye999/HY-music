@@ -9,15 +9,15 @@
 
 <script>
 export default {
-  name: "ListTitle",
+  name: 'ListTitle',
   props: {
     // 显示图标
     showMore: {
       type: Boolean,
-      default: true,
+      default: true
     },
     href: {
-      type: String,
+      type: String
     }
   }
 };

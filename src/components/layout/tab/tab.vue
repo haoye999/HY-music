@@ -6,12 +6,9 @@
     <router-link tag="div" class="tab-item" to="/singer">
       <span class="tab-link">歌手</span>
     </router-link>
-    <router-link tag="div" class="tab-item" to="/rank">
-      <span class="tab-link">排行
+    <router-link tag="div" class="tab-item" to="/dj">
+      <span class="tab-link">电台
       </span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/search">
-      <span class="tab-link">搜索</span>
     </router-link>
   </div>
 </template>
@@ -25,9 +22,15 @@ export default { };
 
 .tab {
   display: flex;
+  position: fixed;
+  top: 44px;
+  left: 0;
   height: 44px;
+  width: 100%;
   line-height: 44px;
   font-size: @font-size-medium;
+  z-index: 10;
+  background: @color-background;
   .tab-item {
     flex: 1;
     text-align: center;
