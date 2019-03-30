@@ -1,16 +1,23 @@
 <template>
   <div class="singer-item" @click="$emit('select', singer)">
-    <div class="singer-item-avatar" v-lazy:background-image="`${singer.img1v1Url}?param=80y80`"></div>
+    <div class="singer-item-avatar" v-lazy:background-image="getSingerAvatar(singer.img1v1Url)"></div>
     <h3 class="sing-name">{{ singer.name }}</h3>
   </div>
 </template>
 
 <script>
+import { httpsify } from 'assets/js/util';
+
 export default {
   name: 'singer-item',
   props: {
     singer: {
       type: Object
+    }
+  },
+  methods: {
+    getSingerAvatar(url) {
+      return httpsify(`${url}?param=80y80`);
     }
   }
 };

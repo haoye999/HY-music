@@ -75,8 +75,9 @@ import {
 } from 'api/recommend';
 import { loginCell } from 'api/user';
 import { ERR_OK, NEED_LOGIN } from 'api/config';
-import { mapGetters, mapMutations } from 'vuex';
+import { httpsify } from 'assets/js/util';
 
+import { mapGetters, mapMutations } from 'vuex';
 import axios from 'axios';
 
 export default {
@@ -120,7 +121,7 @@ export default {
   },
   methods: {
     httpsify(url) {
-      return url.replace(/http:/, 'https:');
+      return httpsify(url);
     },
     _fresh() {
       this._getBanners();

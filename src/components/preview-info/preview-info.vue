@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { httpsify } from 'assets/js/util';
+
 export default {
   name: 'preview-info',
   data() {
@@ -31,7 +33,7 @@ export default {
       return `${parseInt(Math.ceil((this.info.playcount ? this.info.playcount : this.info.playCount) / 1e4))}万`;
     },
     imgSrc() {
-      return `${this.info.picUrl}?param=${this.imgWidth}y${this.imgWidth}&type=webp`;
+      return httpsify(`${this.info.picUrl}?param=${this.imgWidth}y${this.imgWidth}&type=webp`);
     }
   },
   mounted() {

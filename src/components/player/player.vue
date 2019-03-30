@@ -75,6 +75,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import { playMode } from 'assets/js/config';
+import { httpsify } from 'assets/js/util';
 
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
 
@@ -91,9 +92,7 @@ export default {
       return this.mode === playMode.sequence ? 'icon-xunhuan' : this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-bofangye-caozuolan-suijibofang'
     },
     backgroundImage() {
-      return `background: center / cover url(${
-        this.currentSong.image
-      }?param=180y180) no-repeat`;
+      return `background: center / cover url(${httpsify(this.currentSong.image)}?param=180y180) no-repeat`;
     },
     percent() {
       return this.currentTime / this.currentSong.duration;
