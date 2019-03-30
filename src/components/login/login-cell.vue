@@ -19,20 +19,26 @@
         </div>
       </form>
     </div>
-    <div class="info">{{ loggedIn }}</div>
+    <div class="info">{{ info }}</div>
   </div>
 </template>
 
 <script>
 import { loginCell } from 'api/user';
 import { ERR_OK, NEED_LOGIN, WRONG_PWD } from 'api/config';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'login-cell',
   data() {
     return {
-      loggedIn: ''
+      info: ''
     }
+  },
+  computed: {
+    ...mapGetters([
+      'loggedin'
+    ])
   },
   methods: {
     back() {
@@ -50,12 +56,19 @@ export default {
       }).then(data => {
         console.log(data.code);
         if (data.code === ERR_OK) {
-          this.loggedIn = `${data.profile.nickname}，你已经成功登陆`
+          this.info = `${data.profile.nickname}，你已经成功登陆`;
         }
+        setTimeout(() => {
+          this.$router.push('/recommend');
+          this.setLoggedin(true);
+        }, 2000);
       }).catch(err => {
-        this.loggedIn = err.response.data.msg;
+        this.info = err.response.data.msg;
       })
-    }
+    },
+    ...mapMutations({
+      setLoggedin: 'SET_LOGGEDIN'
+    })
   }
 }
 </script>

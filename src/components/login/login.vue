@@ -4,7 +4,7 @@
       <div class="back" @click="back">
         <i class="iconfont icon-back icon"></i>
       </div>
-      <h1 class="title">手机号登陆</h1>
+      <h1 class="title">登陆</h1>
     </div>
     <div class="logo-wrapper">
       <i class="iconfont icon-music logo"></i>

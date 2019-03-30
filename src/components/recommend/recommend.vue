@@ -38,7 +38,7 @@
       <ul class="recommend-list" v-if="recommendResource.length">
         <preview-info v-for="songList in recommendResource" :key="songList.id" :info="songList" class="flex-4"></preview-info>
       </ul>
-      <div class="meg" v-if="!loggedIn">{{ msg }}</div>
+      <div class="meg" v-if="!loggedin">{{ msg }}</div>
     </div>
     <!-- 热门新碟 / album-newest -->
     <div class="recommend-list-content">
@@ -75,6 +75,8 @@ import {
 } from 'api/recommend';
 import { loginCell } from 'api/user';
 import { ERR_OK, NEED_LOGIN } from 'api/config';
+import { mapGetters, mapMutations } from 'vuex';
+
 import axios from 'axios';
 
 export default {
@@ -108,14 +110,22 @@ export default {
       msg: ''
     };
   },
+  computed: {
+    ...mapGetters([
+      'loggedin'
+    ])
+  },
   created() {
-    this._getBanners();
-    this._getPersonalized();
-    this._getRecommendResource();
-    this._getAlbumNewest();
-    this._getDjRecommend();
+    this._fresh();
   },
   methods: {
+    _fresh() {
+      this._getBanners();
+      this._getPersonalized();
+      this._getRecommendResource();
+      this._getAlbumNewest();
+      this._getDjRecommend();
+    },
     _getBanners() {
       getBanners().then(data => {
         if (data.code === ERR_OK) {
@@ -136,11 +146,12 @@ export default {
       getRecommendResource().then(data => {
         if (data.code === ERR_OK) {
           this.recommendResource = Array.prototype.slice.call(data.recommend, 0, 6);
+          this.setLoggedin(true);
         }
       }).catch(err => {
         if (err.response.data.code === NEED_LOGIN) {
           this.msg = err.response.data.msg;
-          this.loggedIn = false;
+          this.setLoggedin(false);
         }
       });
     },
@@ -157,6 +168,14 @@ export default {
           this.djRecommend = Array.prototype.slice.call(data.djRadios, 0, 6);
         }
       });
+    },
+    ...mapMutations({
+      setLoggedin: 'SET_LOGGEDIN'
+    })
+  },
+  watch: {
+    loggedin() {
+      this._fresh();
     }
   },
   components: {
