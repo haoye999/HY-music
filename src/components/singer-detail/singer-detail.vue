@@ -42,8 +42,8 @@ export default {
     this._getArtist(this.singer.id);
   },
   methods: {
-    httpsify: {
-      httpsify(url);
+    httpsify() {
+      return httpsify(url);
     },
     initSinger() {
       // 第一次进入，为了响应速度，先使用VUEX的数据
