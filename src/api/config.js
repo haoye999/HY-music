@@ -1,5 +1,5 @@
 export const commonParams = {
-  host: 'http://musicapi.godhaoye.com',
+  host: 'https://musicapi.godhaoye.com',
   xhrFields: {
     withCredentials: true
   }
