@@ -13,4 +13,4 @@ export const SET_PLAY_MODE = 'SET_PLAY_MODE';
 
 export const SET_CURRENT_INDEX = 'SET_CURRENT_INDEX';
 
-export const SET_loggedin = 'SET_LOGGEDIN';
+export const SET_LOGGEDIN = 'SET_LOGGEDIN';
