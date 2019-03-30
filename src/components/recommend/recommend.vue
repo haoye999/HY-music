@@ -5,7 +5,7 @@
       <slider>
         <div v-for="banner in banners" :key="banner.imageUrl">
           <a>
-            <img :src="banner.imageUrl" alt="banner">
+            <img :src="httpsify(banner.imageUrl)" alt="banner">
             <span
               class="type-title"
               :style="`background: ${banner.titleColor}`"
@@ -119,6 +119,9 @@ export default {
     this._fresh();
   },
   methods: {
+    httpsify(url) {
+      return url.replace(/http:/, 'https:');
+    },
     _fresh() {
       this._getBanners();
       this._getPersonalized();
