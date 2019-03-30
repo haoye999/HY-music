@@ -1,6 +1,6 @@
 <template>
   <div class="singer-detail">
-    <music-list :bgImg="artist.picUrl" :songs="hotSongs" :title="artist.name">
+    <music-list :bgImg="httpsify(artist.picUrl)" :songs="hotSongs" :title="artist.name">
       <div class="share">
         <i class="iconfont icon-share icon"></i>
       </div>
@@ -20,6 +20,7 @@ import { mapGetters } from 'vuex';
 import { ERR_OK } from 'api/config';
 import { getArtist, toggleFollow } from 'api/singerDetail';
 import { createSong } from 'assets/js/song';
+import { httpsify } from 'assets/js/util';
 
 import MusicList from 'components/music-list/music-list.vue';
 
@@ -41,6 +42,9 @@ export default {
     this._getArtist(this.singer.id);
   },
   methods: {
+    httpsify: {
+      httpsify(url);
+    },
     initSinger() {
       // 第一次进入，为了响应速度，先使用VUEX的数据
       this.artist = this.singer;
