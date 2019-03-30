@@ -57,7 +57,7 @@ export default {
     imgObj() {
       return {
         src: `${this.bgImg}?param=400y325`,
-        loading: 'http://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
+        loading: 'https://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
       };
     },
     backgroundPaddingTop() {
