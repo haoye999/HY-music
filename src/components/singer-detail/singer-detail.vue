@@ -42,7 +42,7 @@ export default {
     this._getArtist(this.singer.id);
   },
   methods: {
-    httpsify() {
+    httpsify(url) {
       return httpsify(url);
     },
     initSinger() {
