@@ -1,6 +1,6 @@
 <template>
   <header class="m-header">
-    <router-link class="person-content" to="/login">
+    <router-link class="person-content" :to="personLink">
       <i class="iconfont icon-person person"></i>
     </router-link>
     <div class="space-hold"></div>
@@ -16,8 +16,19 @@
 </template>
 
 <script>
-export default {
+import { mapGetters, mapMutations } from 'vuex';
 
+export default {
+  name: 'm-header',
+  computed: {
+    personLink() {
+      return this.loggedin ? '/user' : 'login';
+    },
+    ...mapGetters([
+      'loggedin',
+      'userId'
+    ])
+  }
 };
 </script>
 

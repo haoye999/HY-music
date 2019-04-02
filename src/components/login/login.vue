@@ -4,14 +4,14 @@
       <div class="back" @click="back">
         <i class="iconfont icon-back icon"></i>
       </div>
-      <h1 class="title">登陆</h1>
+      <h1 class="title">登录</h1>
     </div>
     <div class="logo-wrapper">
       <i class="iconfont icon-music logo"></i>
     </div>
     <div class="login-way-select">
-      <router-link tag="div" to="/login/logincell" class="btn-wrapper"><button>手机号登陆</button></router-link>
-      <router-link tag="div" to="" class="btn-wrapper"><button>邮箱登陆</button></router-link>
+      <router-link tag="div" to="/login/logincell" class="btn-wrapper"><button>手机号登录</button></router-link>
+      <router-link tag="div" to="" class="btn-wrapper"><button>邮箱登录</button></router-link>
     </div>
     <router-view></router-view>
   </div>

@@ -60,6 +60,11 @@ export default new Router({
           component: () => import('components/login/login-cell.vue')
         }
       ]
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('components/user/user.vue')
     }
   ]
 });

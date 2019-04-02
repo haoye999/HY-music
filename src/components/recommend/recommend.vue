@@ -73,7 +73,7 @@ import CatalogBtn from 'components/base/catalog-btn.vue';
 import {
   getBanners, getPersonalized, getRecommendResource, getAlbumNewest, getDjRecommend
 } from 'api/recommend';
-import { loginCell } from 'api/user';
+import { loginCell, getLoginStatus } from 'api/user';
 import { ERR_OK, NEED_LOGIN } from 'api/config';
 import { httpsify } from 'assets/js/util';
 
@@ -150,12 +150,10 @@ export default {
       getRecommendResource().then(data => {
         if (data.code === ERR_OK) {
           this.recommendResource = Array.prototype.slice.call(data.recommend, 0, 6);
-          this.setLoggedin(true);
         }
       }).catch(err => {
         if (err.response.data.code === NEED_LOGIN) {
           this.msg = err.response.data.msg;
-          this.setLoggedin(false);
         }
       });
     },

@@ -25,6 +25,12 @@ const mutations = {
   },
   [types.SET_LOGGEDIN](state, flag) {
     state.loggedin = flag;
+  },
+  [types.SET_USER_ID](state, id) {
+    state.userId = id;
+  },
+  [types.SET_TIPS](state, tips) {
+    state.tips = tips;
   }
 };
 

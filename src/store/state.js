@@ -8,7 +8,9 @@ const state = {
   sequenceList: [],
   mode: playMode.sequence,
   currentIndex: -1,
-  loggedin: true
+  loggedin: true,
+  userId: 0,
+  tips: ''
 };
 
 export default state;

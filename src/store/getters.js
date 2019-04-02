@@ -16,3 +16,7 @@ export const currentIndex = state => state.currentIndex;
 export const currentSong = state => state.playlist[state.currentIndex] || {};
 
 export const loggedin = state => state.loggedin;
+
+export const userId = state => state.userId;
+
+export const tips = state => state.tips;

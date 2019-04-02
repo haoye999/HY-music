@@ -4,7 +4,7 @@
       <div class="back" @click="back">
         <i class="iconfont icon-back icon"></i>
       </div>
-      <h1 class="title">手机号登陆</h1>
+      <h1 class="title">手机号登录</h1>
     </div>
     <div class="form-wrapper">
       <form method="get" class="form">
@@ -19,7 +19,6 @@
         </div>
       </form>
     </div>
-    <div class="info">{{ info }}</div>
   </div>
 </template>
 
@@ -54,20 +53,24 @@ export default {
         phone,
         password
       }).then(data => {
-        console.log(data.code);
+        console.log(data);
         if (data.code === ERR_OK) {
-          this.info = `${data.profile.nickname}，你已经成功登陆`;
-        }
-        setTimeout(() => {
-          this.$router.push('/recommend');
           this.setLoggedin(true);
-        }, 2000);
+          this.setUserId(data.account.id);
+          this.setTips(`${data.profile.nickname}，你已经成功登录`);
+          this.back();
+          setTimeout(() => {
+            this.$router.push('/recommend');
+          }, 2000);
+        }
       }).catch(err => {
-        this.info = err.response.data.msg;
+        this.setTips(err.response.data.msg);
       })
     },
     ...mapMutations({
-      setLoggedin: 'SET_LOGGEDIN'
+      setLoggedin: 'SET_LOGGEDIN',
+      setUserId: 'SET_USER_ID',
+      setTips: 'SET_TIPS'
     })
   }
 }
@@ -140,12 +143,6 @@ export default {
         }
       }
     }
-  }
-  .info {
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    color: greenyellow;
   }
 }
 </style>
