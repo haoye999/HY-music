@@ -166,7 +166,7 @@ export default {
       top: 256px;
       left: 0;
       width: 100%;
-      padding: 50px 130px;
+      padding: 50px 100px;
       .subtitle {
         text-align: center;
         font-size: @font-size-large;
