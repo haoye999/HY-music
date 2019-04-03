@@ -33,19 +33,19 @@
             <div class="duration">{{ formatTime(currentSong.duration) }}</div>
           </div>
           <div class="operators">
-            <div class="i-left">
+            <div class="i-left icon-container">
               <i class="iconfont" :class="modeClass" @click="togglemode"></i>
             </div>
-            <div class="i-left">
+            <div class="i-left icon-container">
               <i class="iconfont icon-verticalright" @click="lastSong" :class="{ disabled: !songReady }"></i>
             </div>
-            <div class="i-center">
+            <div class="i-center icon-container">
               <i :class="[playing ? 'icon-timeout' : 'icon-play-circle', { disabled: !songReady }]" @click="togglePlaying" class="iconfont"></i>
             </div>
-            <div class="i-right">
+            <div class="i-right icon-container">
               <i class="iconfont icon-verticalleft"  :class="{ disabled: !songReady }" @click="nextSong"></i>
             </div>
-            <div class="i-right">
+            <div class="i-right icon-container">
               <i class="iconfont icon-indent"></i>
             </div>
           </div>
@@ -63,8 +63,12 @@
           <p class="desc">{{ currentSong.singer }}</p>
         </div>
         <div class="controls">
-          <i :class="[ playing ? 'icon-timeout' : 'icon-play-circle' ]" @click.stop="togglePlaying" class="iconfont"></i>
-          <i class="iconfont icon-indent"></i>
+          <div class="control icon-container">
+            <i :class="[ playing ? 'icon-timeout' : 'icon-play-circle' ]" @click.stop="togglePlaying" class="iconfont"></i>
+          </div>
+          <div class="control icon-container">
+            <i class="iconfont icon-indent"></i>          
+          </div>          
         </div>
       </div>
     </transition>
@@ -75,7 +79,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import { playMode } from 'assets/js/config';
-import { httpsify } from 'assets/js/util';
+import { httpsify, shuffle } from 'assets/js/util';
 
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
 
@@ -101,6 +105,7 @@ export default {
       'fullScreen',
       'playlist',
       'currentSong',
+      'sequenceList',
       'playing',
       'currentIndex',
       'mode'
@@ -109,6 +114,21 @@ export default {
   methods: {
     togglemode() {
       this.setmode((this.mode + 1) % 3);
+      let list = {};
+      if (this.mode === playMode.random) {
+        list = this.sequenceList;
+        list = shuffle(list);
+        
+        this.resetCurrentSong(list);
+        this.setPlaylist(list);
+      }
+    },
+    resetCurrentSong(list) {
+      let currentIndex = list.findIndex((song) => {
+        return song.id === this.currentSong.id;
+      })
+
+      this.setCurrentIndex(currentIndex);
     },
     toggleFullScreen() {
       this.fullScreen ? this.setFullScreen(false) : this.setFullScreen(true);
@@ -142,7 +162,15 @@ export default {
       this.songReady = false;
     },
     ended() {
-      this.nextSong();
+      if (this.mode === playMode.loop) {
+        this.loop();
+      } else {
+        this.nextSong();
+      }
+    },
+    loop() {
+      this.$refs.audio.currentTime = 0;
+      this.$refs.audio.play();
     },
     canplay() {
       this.songReady = true;
@@ -167,11 +195,15 @@ export default {
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
-      setmode: 'SET_PLAY_MODE'
+      setmode: 'SET_PLAY_MODE',
+      setPlaylist: 'SET_PLAYLIST'
     })
   },
   watch: {
-    currentSong() {
+    currentSong(newSong, oldSong) {
+      if (newSong.id === oldSong.id) {
+        return;
+      }
       this.$nextTick(() => {
         this.$refs.audio.play();
         this.setPlayingState(true);
@@ -350,6 +382,7 @@ export default {
     z-index: 150;
     align-items: center;
     background: @color-highlight-background;
+    opacity: .95;
     .mini-progress-bar-container {
       position: absolute;
       top: -6px;
@@ -380,9 +413,17 @@ export default {
       width: 70px;
       height: 30px;
       display: flex;
-      justify-content: space-between;
-      i {
-          font-size: 30px;
+      align-items: center;
+      justify-content: space-around;
+      .control {
+        // width: 30px;
+        // height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        i {
+            font-size: 30px;
+        }
       }
     }
   }

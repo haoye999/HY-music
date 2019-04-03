@@ -5,7 +5,7 @@
     </div>
     <h1 class="music-list-title" v-show="titleShow">{{ title }}</h1>
     <div class="background" ref="background" :style="backgroundPaddingTop">
-      <div class="background-image" :style="backgroundImageFilter" v-lazy:background-image="imgObj" ref="backgroundImage"></div>
+      <div class="background-image" ref="backgroundImage"></div>
       <div class="top-block" :style="topBlockOpacity" ref="topBlock"></div>
       <slot></slot>
     </div>
@@ -54,17 +54,11 @@ export default {
     };
   },
   computed: {
-    imgObj() {
-      return {
-        src: `${this.bgImg}?param=400y325`,
-        loading: 'https://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg'
-      };
-    },
     backgroundPaddingTop() {
       this.backgroundPaddingTopPx = Math.max(this.initTop + this.scrollY, MIN_PADDING_TOP);
       return `padding-top: ${this.backgroundPaddingTopPx}px`;
     },
-    backgroundImageFilter() {
+    backgroundImage() {
       return `filter: blur(${(-this.scrollY) / 80 | 0}px)`;
     },
     topBlockOpacity() {
@@ -82,6 +76,13 @@ export default {
     back() {
       this.$router.go(-1);
     },
+    loadImage() {
+      let image = new Image();
+      image.src = `${this.bgImg}?param=400y325`;
+      image.onload = () => {
+        this.$refs.backgroundImage.style.backgroundImage = `url(${this.bgImg}?param=400y325)`;
+      }
+    },
     scroll(pos) {
       this.scrollY = pos.y;
     },
@@ -98,6 +99,7 @@ export default {
   mounted() {
     this.initTop = this.$refs.background.clientHeight;
     this.$refs.list.$el.style.top = `${this.initTop}px`;
+    this.loadImage();
   },
   components: {
     Scroll,
@@ -159,7 +161,7 @@ export default {
       width: 100%;
       height: 100%;
       transition: background-image .5s;
-      background: no-repeat center / cover;
+      background: no-repeat center / cover url(https://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg);
     }
   }
   .list {

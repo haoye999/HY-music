@@ -44,7 +44,9 @@ export default {
     progressTouchStart(e) {
       this.touch.init = true;
       this.touch.startX = e.touches[0].pageX;
-      this.touch.scale = +this.$refs.progress.style.transform.replace(/scaleX\((\d\.\d+)\)/, '$1');
+      // 没移动会有问题
+      this.touch.newPercent = this.percent;
+      console.log(this.touch.newPercent);
     },
     progressTouchMove(e) {
       if (!this.touch.init) {
@@ -61,6 +63,7 @@ export default {
       this.touch.init = false;
     },
     fresh(newPercent) {
+      newPercent = Math.min(Math.max(newPercent, 0), 1);
       const currentPos = this.$refs.progressWrapper.clientWidth * newPercent - 5;
       this.$refs.progress.style.transform = `scaleX(${newPercent})`;
       this.$refs.btn.style.transform = `translate3d(${currentPos}px, -6px, 0)`;

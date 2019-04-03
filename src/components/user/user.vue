@@ -182,7 +182,7 @@ export default {
   .logout {
     position: absolute;
     // height: 30px;
-    bottom: 30px;
+    bottom: 70px;
     left: 50%;
     transform: translate3d(-50%, 0, 0);
     width: 30%;

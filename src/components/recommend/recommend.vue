@@ -193,7 +193,7 @@ export default {
 <style lang="less" scoped>
 @import "~assets/style/variable.less";
 
-.recommend {  
+.recommend {
   margin: 95px 0 50px 0;
   // position: fixed;
   // overflow-y: auto;
