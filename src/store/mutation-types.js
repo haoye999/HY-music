@@ -18,3 +18,5 @@ export const SET_LOGGEDIN = 'SET_LOGGEDIN';
 export const SET_USER_ID = 'SET_USER_ID';
 
 export const SET_TIPS = 'SET_TIPS';
+
+export const SET_SONG_LIST = 'SET_SONG_LIST';

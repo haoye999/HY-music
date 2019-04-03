@@ -31,6 +31,9 @@ const mutations = {
   },
   [types.SET_TIPS](state, tips) {
     state.tips = tips;
+  },
+  [types.SET_SONG_LIST](state, songList) {
+    state.songList = songList;
   }
 };
 

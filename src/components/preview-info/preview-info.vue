@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-info">
+  <div class="preview-info" @click="$emit('select', info)">
     <div ref="imgContent" class="img-content">
       <img v-lazy="imgSrc" alt="封面">
       <div class="mask"></div>

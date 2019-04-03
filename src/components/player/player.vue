@@ -45,7 +45,7 @@
             <div class="i-right icon-container">
               <i class="iconfont icon-verticalleft"  :class="{ disabled: !songReady }" @click="nextSong"></i>
             </div>
-            <div class="i-right icon-container">
+            <div class="i-right icon-container" @click="openPlayList">
               <i class="iconfont icon-indent"></i>
             </div>
           </div>
@@ -73,6 +73,7 @@
       </div>
     </transition>
     <audio ref="audio" :src="currentSong.url" @ended="ended" @canplay="canplay" @error="error" @timeupdate="timeupdate"></audio>
+    <play-list ref="playList" />
   </div>
 </template>
 
@@ -82,6 +83,7 @@ import { playMode } from 'assets/js/config';
 import { httpsify, shuffle } from 'assets/js/util';
 
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
+import PlayList from 'components/play-list/play-list.vue';
 
 export default {
   name: 'player',
@@ -112,6 +114,9 @@ export default {
     ])
   },
   methods: {
+    openPlayList() {
+      this.$refs.playList.open();
+    },
     togglemode() {
       this.setmode((this.mode + 1) % 3);
       let list = {};
@@ -217,7 +222,8 @@ export default {
     }
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    PlayList
   }
 };
 </script>
@@ -282,14 +288,17 @@ export default {
         flex-direction: column;
         justify-content: space-around;
         white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
+        width: 0px;
         .title {
           font-size: @font-size-large;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
         .subtitle {
           font-size: @font-size-small-x;
           color: @color-text-d;
+          text-overflow: ellipsis;
+          overflow: hidden;
         }
       }
       .share {
@@ -399,14 +408,20 @@ export default {
       display: flex;
       flex-direction: column;
       height: 100%;
+      width: 0;
       padding-left: 8px;
       justify-content: space-around;
+      white-space: nowrap;
       .name {
         font-size: @font-size-medium-s;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .desc {
         font-size: @font-size-small-s;
         color: @color-text-d;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     .controls {

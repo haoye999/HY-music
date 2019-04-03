@@ -27,16 +27,30 @@ export function createSong(musicData) {
     return res.join('/');
   }
 
+  if (musicData.ar) {
+    return new Song({
+      id: musicData.id,
+      mid: musicData.mv || musicData.mvid,
+      name: musicData.name,
+      alia: musicData.alia[0],
+      singer: filterSinger(musicData.ar),
+      album: musicData.al.name,
+      albumId: musicData.al.id,
+      duration: musicData.dt / 1000,
+      image: musicData.al.picUrl,
+      url: `https://music.163.com/song/media/outer/url?id=${musicData.id}.mp3`
+    });
+  }
   return new Song({
     id: musicData.id,
-    mid: musicData.mv,
+    mid: musicData.mv || musicData.mvid,
     name: musicData.name,
-    alia: musicData.alia[0],
-    singer: filterSinger(musicData.ar),
-    album: musicData.al.name,
-    albumId: musicData.al.id,
-    duration: musicData.dt / 1000,
-    image: musicData.al.picUrl,
+    alia: musicData.alias[0],
+    singer: filterSinger(musicData.artists),
+    album: musicData.album.name,
+    albumId: musicData.album.id,
+    duration: musicData.duration / 1000,
+    image: musicData.album.picUrl,
     url: `https://music.163.com/song/media/outer/url?id=${musicData.id}.mp3`
   });
 }

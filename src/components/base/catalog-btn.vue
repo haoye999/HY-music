@@ -1,7 +1,7 @@
 <template>
-  <div class="catalog-btn">
+  <div class="catalog-btn" @click="$emit('click', catalog.id)">
     <div class="catalog-icon"><slot></slot></div>
-    <h3 class="catalog-title">{{ title }}</h3>
+    <h3 class="catalog-title">{{ catalog.title }}</h3>
   </div>
 </template>
 
@@ -9,9 +9,9 @@
 export default {
   name: 'catalog-btn',
   props: {
-    title: {
-      type: String,
-      default: '分类'
+    catalog: {
+      type: Object,
+      default: () => { title: '分类' }
     }
   }
 };

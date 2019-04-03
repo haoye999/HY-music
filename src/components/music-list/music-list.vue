@@ -5,7 +5,7 @@
     </div>
     <h1 class="music-list-title" v-show="titleShow">{{ title }}</h1>
     <div class="background" ref="background" :style="backgroundPaddingTop">
-      <div class="background-image" ref="backgroundImage"></div>
+      <div class="background-image" :style="backgroundImageBlur" ref="backgroundImage"></div>
       <div class="top-block" :style="topBlockOpacity" ref="topBlock"></div>
       <slot></slot>
     </div>
@@ -24,6 +24,7 @@
 import SongList from 'components/base/song-list.vue';
 import Scroll from 'components/base/scroll/scroll.vue';
 import Loading from 'components/base/loading';
+import { httpsify } from 'assets/js/util';
 
 import { mapMutations, mapActions } from 'vuex';
 
@@ -37,6 +38,10 @@ export default {
     bgImg: {
       type: String,
       default: ''
+    },
+    bgHeight: {
+      type: Number,
+      default: 70
     },
     songs: {
       type: Array,
@@ -58,8 +63,8 @@ export default {
       this.backgroundPaddingTopPx = Math.max(this.initTop + this.scrollY, MIN_PADDING_TOP);
       return `padding-top: ${this.backgroundPaddingTopPx}px`;
     },
-    backgroundImage() {
-      return `filter: blur(${(-this.scrollY) / 80 | 0}px)`;
+    backgroundImageBlur() {
+      return `filter: blur(${Math.floor((-this.scrollY) / 80)}px)`;
     },
     topBlockOpacity() {
       return `opacity: ${1 - (-this.scrollY) / this.initTop}`;
@@ -78,7 +83,7 @@ export default {
     },
     loadImage() {
       let image = new Image();
-      image.src = `${this.bgImg}?param=400y325`;
+      image.src = `${httpsify(this.bgImg)}?param=400y325`;
       image.onload = () => {
         this.$refs.backgroundImage.style.backgroundImage = `url(${this.bgImg}?param=400y325)`;
       }
@@ -97,7 +102,8 @@ export default {
     ])
   },
   mounted() {
-    this.initTop = this.$refs.background.clientHeight;
+    this.initTop = this.$refs.background.clientWidth * this.bgHeight / 100;
+    this.$refs.background.style.paddingTop = `${this.initTop}px`;
     this.$refs.list.$el.style.top = `${this.initTop}px`;
     this.loadImage();
   },
@@ -131,13 +137,16 @@ export default {
     position: absolute;
     top: 0;
     left: 50px;
-    right: 50px;
+    right: 20px;
     height: 40px;
     line-height: 40px;
     z-index: 100;
     // text-align: center;
     color: @color-theme;
     font-size: @font-size-large;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .background {
     position: relative;

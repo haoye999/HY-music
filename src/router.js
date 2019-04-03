@@ -17,7 +17,19 @@ export default new Router({
     {
       path: '/recommend',
       name: 'recommend',
-      component: Recommend
+      component: Recommend,
+      children: [
+        {
+          path: 'dailyrecommend',
+          name: 'daily-recommend',
+          component: () => import('components/daily-recommend/daily-recommend.vue')
+        },
+        {
+          path: ':id',
+          name: 'song-list-detail',
+          component: () => import('components/song-list-detail/song-list-detail.vue')
+        }
+      ]
     },
     {
       path: '/rank',

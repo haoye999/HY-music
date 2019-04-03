@@ -20,3 +20,5 @@ export const loggedin = state => state.loggedin;
 export const userId = state => state.userId;
 
 export const tips = state => state.tips;
+
+export const songList = state => state.songList;

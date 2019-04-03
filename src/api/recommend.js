@@ -47,3 +47,12 @@ export function getDjRecommend() {
 
   return axios(options).then(res => res.data);
 }
+
+export function getRecommendSongs() {
+  const options = {
+    method: 'GET',
+    url: `${commonParams.host}/recommend/songs`
+  };
+
+  return axios(options).then(res => res.data);
+}

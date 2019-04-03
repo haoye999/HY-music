@@ -15,51 +15,18 @@
       </slider>
     </div>
     <div class="catalog-content">
-      <catalog-btn class="flex-3" v-for="catalog in catalogs" :key="catalog.title" :title="catalog.title">
+      <catalog-btn class="flex-3" v-for="catalog in catalogs" :key="catalog.id" :catalog="catalog" @click="catalogBtnClickHandle">
         <i class="iconfont icon" :class="catalog.icon"></i>
       </catalog-btn>
     </div>
-    <!-- 推荐歌单 / personlized -->
-    <div class="recommend-list-content">
-      <div class="loading-container" v-show="!personalized.length">
-        <loading ></loading>
-      </div>
-      <list-title>推荐歌单</list-title>
-      <ul class="recommend-list">
-        <preview-info v-for="songList in personalized" :key="songList.id" :info="songList" class="flex-4"></preview-info>
-      </ul>
+    
+    <div class="song-list-wrapper">
+      <recommend-list v-for="recommendList in recommends" :key="recommendList.title" :title="recommendList.title" class="recommend-list-content" :recommendList="recommendList.recommend" @select="selectSongList"></recommend-list>      
     </div>
-    <!-- 个性化推荐 / recommend-resource -->
-    <div class="recommend-list-content">
-      <div class="loading-container" v-show="!recommendResource.length">
-        <loading ></loading>
-      </div>
-      <list-title class="list-title">个性化推荐</list-title>
-      <ul class="recommend-list" v-if="recommendResource.length">
-        <preview-info v-for="songList in recommendResource" :key="songList.id" :info="songList" class="flex-4"></preview-info>
-      </ul>
-      <div class="meg" v-if="!loggedin">{{ msg }}</div>
-    </div>
-    <!-- 热门新碟 / album-newest -->
-    <div class="recommend-list-content">
-      <div class="loading-container" v-show="!albumNewest.length">
-        <loading ></loading>
-      </div>
-      <list-title class="list-title">热门新碟</list-title>
-      <ul class="recommend-list" v-if="albumNewest.length">
-        <preview-info v-for="songList in albumNewest" :key="songList.id" :info="songList" class="flex-4"></preview-info>
-      </ul>
-    </div>
-    <!-- 推荐电台 / dj-recommend -->
-    <div class="recommend-list-content">
-      <div class="loading-container" v-show="!djRecommend.length">
-        <loading ></loading>
-      </div>
-      <list-title class="list-title">电台推荐</list-title>
-      <ul class="recommend-list" v-if="djRecommend.length">
-        <preview-info v-for="dj in djRecommend" :key="dj.id" :info="dj" class="flex-4"></preview-info>
-      </ul>
-    </div>
+
+    <transition name="singer-detail-router-fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -69,6 +36,7 @@ import ListTitle from 'components/base/list-title.vue';
 import PreviewInfo from 'components/preview-info/preview-info.vue';
 import Loading from 'components/base/loading.vue';
 import CatalogBtn from 'components/base/catalog-btn.vue';
+import RecommendList from 'components/recommend/recommend-list.vue';
 
 import {
   getBanners, getPersonalized, getRecommendResource, getAlbumNewest, getDjRecommend
@@ -88,18 +56,22 @@ export default {
       personalized: [],
       catalogs: [
         {
+          id: 0,
           title: '私人FM',
           icon: 'icon-Radio-'
         },
         {
+          id: 1,
           title: '每日推荐',
           icon: 'icon-cc-calendar'
         },
         {
+          id: 2,
           title: '歌单',
           icon: 'icon-musiclist'
         },
         {
+          id: 3,
           title: '排行榜',
           icon: 'icon-ranking'
         }
@@ -112,6 +84,26 @@ export default {
     };
   },
   computed: {
+    recommends() {
+      return [
+        {
+          title: '推荐歌单',
+          recommend: this.personalized
+        },
+        {
+          title: '个性化推荐',
+          recommend: this.recommendResource
+        },
+        {
+          title: '热门新碟',
+          recommend: this.albumNewest
+        },
+        {
+          title: '电台推荐',
+          recommend: this.djRecommend
+        }
+      ]
+    },
     ...mapGetters([
       'loggedin'
     ])
@@ -120,6 +112,34 @@ export default {
     this._fresh();
   },
   methods: {
+    catalogBtnClickHandle(id) {
+      console.log('hhh');
+      switch (id) {
+        case 0:
+          
+          break;
+        case 1:
+          this.$router.push({
+            path: '/recommend/dailyrecommend'
+          });
+          break;
+        case 2:
+          
+          break;
+        case 3:
+          
+          break;
+      
+        default:
+          break;
+      }
+    },
+    selectSongList(songList) {
+      this.$router.push({
+        path: `/recommend/${songList.id}`
+      });
+      this.setSongList(songList);
+    },
     httpsify(url) {
       return httpsify(url);
     },
@@ -172,7 +192,8 @@ export default {
       });
     },
     ...mapMutations({
-      setLoggedin: 'SET_LOGGEDIN'
+      setLoggedin: 'SET_LOGGEDIN',
+      setSongList: 'SET_SONG_LIST'
     })
   },
   watch: {
@@ -185,7 +206,8 @@ export default {
     ListTitle,
     PreviewInfo,
     Loading,
-    CatalogBtn
+    CatalogBtn,
+    RecommendList
   }
 };
 </script>
@@ -218,33 +240,6 @@ export default {
       opacity: 0.9;
       letter-spacing: 1px;
     }
-  }
-  .recommend-list-content {
-    position: relative;
-    overflow: hidden;
-    min-height: 337px;
-    margin: 20px 12px 0 12px;
-    .recommend-list {
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .list-title {
-      padding-left: 5px;
-    }
-    .meg {
-      position: absolute;
-      top: 60%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-  .loading-container {
-    display: flex;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    width: 100px;
-    transform: translate(-50%, 0);
   }
   .catalog-content {
     display: flex;
