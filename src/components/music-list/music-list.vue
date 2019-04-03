@@ -85,7 +85,7 @@ export default {
       let image = new Image();
       image.src = `${httpsify(this.bgImg)}?param=400y325`;
       image.onload = () => {
-        this.$refs.backgroundImage.style.backgroundImage = `url(${this.bgImg}?param=400y325)`;
+        this.$refs.backgroundImage.style.backgroundImage = `url(${httpsify(this.bgImg)}?param=400y325)`;
       }
     },
     scroll(pos) {
