@@ -72,8 +72,10 @@
         </div>
       </div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @ended="ended" @canplay="canplay" @error="error" @timeupdate="timeupdate"></audio>
-    <play-list ref="playList" />
+      <audio ref="audio" :src="currentSong.url" @ended="ended" @canplay="canplay" @error="error" @timeupdate="timeupdate"></audio>
+    <transition name="bottom-in" :duration="500">
+      <play-list ref="playList" />
+    </transition>
   </div>
 </template>
 
