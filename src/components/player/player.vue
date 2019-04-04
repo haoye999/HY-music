@@ -28,7 +28,7 @@
           <div class="progress-content">
             <div class="current-time">{{ formatTime(currentTime) }}</div>
             <div class="progress-bar-content">
-              <progress-bar :percent="percent" @percentChange="percentChange"/>
+              <progress-bar ref="progressBarNormal" :percent="percent" @percentChange="percentChange"/>
             </div>
             <div class="duration">{{ formatTime(currentSong.duration) }}</div>
           </div>
@@ -55,7 +55,7 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="toggleFullScreen">
         <div class="mini-progress-bar-container">
-          <progress-bar :percent="percent" @percentChange="percentChange"/>
+          <progress-bar ref="progressBarMini" :percent="percent" @percentChange="percentChange"/>
         </div>
         <div class="avatar rotate" :class="{ pause: !playing }" :style="backgroundImage"></div>
         <div class="text">
@@ -137,6 +137,11 @@ export default {
     },
     toggleFullScreen() {
       this.fullScreen ? this.setFullScreen(false) : this.setFullScreen(true);
+      this.$nextTick(() => {
+        console.log(this.fullScreen);
+        this.$refs.progressBarNormal.fresh(this.percent);
+        this.$refs.progressBarMini.fresh(this.percent);
+      });
     },
     togglePlaying() {
       if (!this.songReady) {
@@ -388,7 +393,7 @@ export default {
     height: 50px;
     width: 100%;
     padding: 5px;
-    z-index: 150;
+    z-index: 149;
     align-items: center;
     background: @color-highlight-background;
     opacity: .95;

@@ -31,7 +31,9 @@ export default {
   watch: {
     percent(newPercent) {
       if (newPercent >= 0 && newPercent <= 1 && !this.touch.init)
-      this.fresh(newPercent);
+      {
+        this.fresh(newPercent);      
+      }
     }
   },
   methods: {
@@ -63,9 +65,9 @@ export default {
     },
     fresh(newPercent) {
       newPercent = Math.min(Math.max(newPercent, 0), 1);
-      const currentPos = this.$refs.progressWrapper.clientWidth * newPercent - 5;
       this.$refs.progress.style.transform = `scaleX(${newPercent})`;
-      this.$refs.btn.style.transform = `translate3d(${currentPos}px, -6px, 0)`;
+      const currentPos = this.$refs.progressWrapper.clientWidth * newPercent - 5;
+      this.$refs.btn.style.transform = `translate(${currentPos}px, -6px)`;
     }
   }
 };
