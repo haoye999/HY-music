@@ -72,16 +72,18 @@ export default {
 
 
 <style lang="less">
+@import '~assets/style/variable.less';
+
 .tips {
   position: fixed;
-  bottom: 40%;
-  left: 50%;
-  transform: translate3d(-50%, 0, 0);
-  height: 30px;
-  line-height: 30px;
+  top: 0px;
+  left: 0;
+  height: 40px;
+  width: 100%;
   text-align: center;
-  color: greenyellow;
-  background: rgba(0, 0, 0, .3);
+  line-height: 40px;
+  // color: @color-icon;
+  background: @color-background-o;
   z-index: 500;
 }
 </style>

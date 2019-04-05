@@ -113,10 +113,9 @@ export default {
   },
   methods: {
     catalogBtnClickHandle(id) {
-      console.log('hhh');
       switch (id) {
         case 0:
-          
+          this.setTips('此功能还未开发，尽情期待');
           break;
         case 1:
           this.$router.push({
@@ -124,10 +123,10 @@ export default {
           });
           break;
         case 2:
-          
+          this.setTips('此功能还未开发，尽情期待');
           break;
         case 3:
-          
+          this.setTips('此功能还未开发，尽情期待');
           break;
       
         default:
@@ -193,7 +192,8 @@ export default {
     },
     ...mapMutations({
       setLoggedin: 'SET_LOGGEDIN',
-      setSongList: 'SET_SONG_LIST'
+      setSongList: 'SET_SONG_LIST',
+      setTips: 'SET_TIPS'
     })
   },
   watch: {

@@ -9,7 +9,7 @@
       </div>
       <scroll :data="sequenceList" class="song-list-wrapper">
         <ul class="song-list">
-          <li class="song" @click="selectItem(song, index)" :class="{ 'song-active': index === currentIndex }" v-for="(song, index) in sequenceList" :key="song.id">
+          <li class="song" @click="selectItem(song, index)" :class="{ 'song-active': index === indexSequenceList }" v-for="(song, index) in sequenceList" :key="song.id">
             <h3>{{ song.name }}<span class="song-singer"> - {{ song.singer }}</span></h3>
             <div class="delete-wrapper" @click.stop="deleteSong(song, index)">
               <i class="iconfont icon-delete"></i>
@@ -41,7 +41,9 @@ export default {
       'sequenceList',
       'playlist',
       'mode',
-      'currentIndex'
+      'currentIndex',
+      'current',
+      'currentSong'
     ]),
     currentMode() {
       if (this.mode === playMode.sequence) {
@@ -54,6 +56,15 @@ export default {
         return '错了';
       }
     },
+    indexSequenceList() {
+      let _index;
+      if (this.mode === playMode.random) {
+        _index = this.sequenceList.findIndex((song) => {
+          return song.id === this.currentSong.id;
+        })
+      }
+      return _index;
+    },
     modeClass(){
       return this.mode === playMode.sequence ? 'icon-xunhuan' : this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-bofangye-caozuolan-suijibofang'
     },
@@ -65,11 +76,11 @@ export default {
     open() {
       this.showFlag = true;
     },
-    selectItem(currentSong, index) {
+    selectItem(selectSong, index) {
       let _index = index;
       if (this.mode === playMode.random) {
         _index = this.playlist.findIndex((song) => {
-          return song.id === currentSong.id;
+          return song.id === selectSong.id;
         })
       }
       this.setCurrentIndex(_index);
