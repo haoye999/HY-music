@@ -67,14 +67,14 @@
             <i :class="[ playing ? 'icon-timeout' : 'icon-play-circle' ]" @click.stop="togglePlaying" class="iconfont"></i>
           </div>
           <div class="control icon-container">
-            <i class="iconfont icon-indent"></i>          
+            <i class="iconfont icon-indent" @click.stop="openPlayList"></i>          
           </div>          
         </div>
       </div>
     </transition>
       <audio ref="audio" :src="currentSong.url" @ended="ended" @canplay="canplay" @error="error" @timeupdate="timeupdate"></audio>
-    <transition name="bottom-in" :duration="500">
-      <play-list ref="playList" />
+    <transition name="bottom-in-out">
+      <play-list v-if="showPlayList" ref="playList" @close="closePlayList" />
     </transition>
   </div>
 </template>
@@ -92,7 +92,8 @@ export default {
   data() {
     return {
       songReady: false,
-      currentTime: 0
+      currentTime: 0,
+      showPlayList: false
     };
   },
   computed: {
@@ -117,7 +118,13 @@ export default {
   },
   methods: {
     openPlayList() {
-      this.$refs.playList.open();
+      this.showPlayList = true;
+      this.$nextTick(() => {
+        this.$refs.playList.scrollToCurrent();
+      })
+    },
+    closePlayList() {
+      this.showPlayList = false;
     },
     togglemode() {
       this.setmode((this.mode + 1) % 3);

@@ -57,6 +57,9 @@ export default {
     },
     refresh() {
       this.scroll && this.scroll.refresh();
+    },
+    scrollToElement(...args) {
+      this.scroll && this.scroll.scrollToElement(...args);
     }
   },
   watch: {

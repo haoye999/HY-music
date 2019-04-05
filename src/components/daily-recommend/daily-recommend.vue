@@ -1,6 +1,6 @@
 <template>
   <div class="song-list-detail">
-    <music-list v-if="songs.length" :songs="songs" :bgImg="songs[0].image" :bgHeight="30">
+    <music-list :songs="songs" :bgImg="bgImg" :bgHeight="30">
       <div class="background-dark"></div>
       <div class="time">
         <span class="time-date">{{ time.date }}</span>/<span class="time-month">{{ time.month }}</span>
@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       songs: [],
+      bgImg: '',
       time: {
         date: 1,
         month: 1
@@ -47,6 +48,7 @@ export default {
       getRecommendSongs().then(data => {
         if (data.code === ERR_OK) {
           this.songs = this._normalizeSongs(data.recommend);
+          this.bgImg = this.songs[0].image;
         }
       })
     },

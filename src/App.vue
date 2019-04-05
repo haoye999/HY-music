@@ -8,7 +8,7 @@
       </keep-alive>
     </transition>
     <player></player>
-    <transition name="root-router-fade" mode="out-in">
+    <transition name="tips" mode="out-in">
       <div v-if="tips" class="tips">{{ tips }}</div>
     </transition>
   </div>
@@ -82,7 +82,6 @@ export default {
   width: 100%;
   text-align: center;
   line-height: 40px;
-  // color: @color-icon;
   background: @color-background-o;
   z-index: 500;
 }

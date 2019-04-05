@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showFlag" class="play-list" @click="close">
+  <div class="play-list" @click="$emit('close')">
     <div class="main-content play-list-content" @click.stop>
       <div class="play-mode">
         <div class="icon-container">
@@ -7,18 +7,18 @@
         </div>
         <h3 class="play-mode-name">{{ currentMode }}</h3>
       </div>
-      <scroll :data="sequenceList" class="song-list-wrapper">
+      <scroll ref="scroll" :data="sequenceList" class="song-list-wrapper">
         <ul class="song-list">
-          <li class="song" @click="selectItem(song, index)" :class="{ 'song-active': index === indexSequenceList }" v-for="(song, index) in sequenceList" :key="song.id">
-            <h3>{{ song.name }}<span class="song-singer"> - {{ song.singer }}</span></h3>
-            <div class="delete-wrapper" @click.stop="deleteSong(song, index)">
+          <li class="song" ref="songList" @click="selectItem(song, index)" :class="{ 'song-active': index === indexSequenceList }" v-for="(song, index) in sequenceList" :key="song.id">
+            <h3 class="song-title"><span class="song-name">{{ song.name }}</span><span class="song-singer"> - {{ song.singer }}</span></h3>
+            <div class="delete-wrapper" @click.stop="deleteItem(song)">
               <i class="iconfont icon-delete"></i>
             </div>
           </li>
         </ul>
       </scroll>
 
-      <div class="close" @click="close">
+      <div class="close" @click="$emit('close')">
         <button>关闭</button>
       </div>
     </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import { playMode } from 'assets/js/config';
 import Scroll from 'components/base/scroll/scroll.vue';
 
@@ -57,24 +57,21 @@ export default {
       }
     },
     indexSequenceList() {
-      let _index;
-      if (this.mode === playMode.random) {
-        _index = this.sequenceList.findIndex((song) => {
-          return song.id === this.currentSong.id;
-        })
-      }
-      return _index;
+      this._index = this.sequenceList.findIndex((song) => {
+        return song.id === this.currentSong.id;
+      })
+      return this._index;
     },
     modeClass(){
       return this.mode === playMode.sequence ? 'icon-xunhuan' : this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-bofangye-caozuolan-suijibofang'
     },
   },
   methods: {
-    close() {
-      this.showFlag = false;
-    },
-    open() {
-      this.showFlag = true;
+    scrollToCurrent() {
+      this.$nextTick(() => {
+        let index = Math.max(this._index - 4, 0);
+        this.$refs.scroll.scrollToElement(this.$refs.songList[index], 300);
+      })
     },
     selectItem(selectSong, index) {
       let _index = index;
@@ -84,13 +81,17 @@ export default {
         })
       }
       this.setCurrentIndex(_index);
+      this.scrollToCurrent();
     },
-    deleteSong(song, index) {
-      console.log('删除' + song.name + index);
+    deleteItem(song) {
+      this.deleteSong(song);
     },
     ...mapMutations({
       setCurrentIndex: 'SET_CURRENT_INDEX'
-    })
+    }),
+    ...mapActions([
+      'deleteSong'
+    ])
   },
   components: {
     Scroll
@@ -145,14 +146,31 @@ export default {
           display: flex;
           justify-content: space-between;
           padding: 10px;
+          .song-title {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            .song-singer {
+              color: @color-text-d;
+              font-size: @font-size-small-m;
+            }
+          }
           &.song-active {
             color: @color-icon;
-          }
-          .song-singer {
-            color: @color-text-d;
-            font-size: @font-size-small-m;
+            .song-name {
+              &::before {
+                font-family: "iconfont" !important;
+                font-size: 16px;
+                font-style: normal;
+                padding-right: 10px;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                content: '\e7ca'
+              }
+            }            
           }
           i {
+            color: @color-text-d;
             font-size: @font-size-large;
           }
         }

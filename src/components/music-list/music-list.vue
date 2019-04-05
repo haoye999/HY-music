@@ -82,6 +82,9 @@ export default {
       this.$router.go(-1);
     },
     loadImage() {
+      if (this.bgImg === '') {
+        return;
+      }
       let image = new Image();
       image.src = `${httpsify(this.bgImg)}?param=400y325`;
       image.onload = () => {
@@ -106,6 +109,11 @@ export default {
     this.$refs.background.style.paddingTop = `${this.initTop}px`;
     this.$refs.list.$el.style.top = `${this.initTop}px`;
     this.loadImage();
+  },
+  watch: {
+    bgImg() {
+      this.loadImage();
+    }
   },
   components: {
     Scroll,
