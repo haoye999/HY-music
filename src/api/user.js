@@ -12,6 +12,16 @@ export function loginCell(params) {
   return axios(options).then(res => res.data);
 }
 
+export function loginMail(params) {
+  const options = {
+    method: 'get',
+    url: `${commonParams.host}/login`,
+    params
+  };
+
+  return axios(options).then(res => res.data);
+}
+
 export function logout() {
   const options = {
     method: 'get',

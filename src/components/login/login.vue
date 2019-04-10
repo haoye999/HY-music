@@ -10,20 +10,31 @@
       <i class="iconfont icon-music logo"></i>
     </div>
     <div class="login-way-select">
-      <router-link tag="div" to="/login/logincell" class="btn-wrapper"><button>手机号登录</button></router-link>
-      <router-link tag="div" to="" class="btn-wrapper"><button>邮箱登录</button></router-link>
+      <div class="btn-wrapper" @click="selectLoginWay('cell')"><button>手机号登录</button></div>
+      <div class="btn-wrapper" @click="selectLoginWay('email')"><button>邮箱登录</button></div>
     </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'login',
   methods: {
     back() {
       this.$router.go(-1);
     },
+    selectLoginWay(loginWay) {
+      this.$router.push({
+        path: '/login/loginways'
+      })
+      this.setLoginWay(loginWay);
+    },
+    ...mapMutations({
+      setLoginWay: 'SET_LOGIN_WAY'
+    })
   }
 }
 </script>

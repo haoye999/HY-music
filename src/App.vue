@@ -76,13 +76,15 @@ export default {
 
 .tips {
   position: fixed;
-  top: 0px;
-  left: 0;
+  top: 5px;
+  left: 10%;
   height: 40px;
-  width: 100%;
+  width: 80%;
+  border-radius: 10px;
   text-align: center;
   line-height: 40px;
   background: @color-background-o;
+  color: @color-theme;
   z-index: 500;
 }
 </style>

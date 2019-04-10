@@ -21,7 +21,15 @@
     </div>
     
     <div class="song-list-wrapper">
-      <recommend-list v-for="recommendList in recommends" :key="recommendList.title" :title="recommendList.title" class="recommend-list-content" :recommendList="recommendList.recommend" @select="selectSongList"></recommend-list>      
+      <recommend-list 
+        v-for="recommendList in recommends"
+        :key="recommendList.title"
+        :title="recommendList.title"
+        class="recommend-list-content"
+        :recommendList="recommendList.recommend"
+        @select="selectSongList"
+        :info="recommendList.info"
+      />
     </div>
 
     <transition name="singer-detail-router-fade" mode="out-in">
@@ -88,19 +96,23 @@ export default {
       return [
         {
           title: '推荐歌单',
-          recommend: this.personalized
+          recommend: this.personalized,
+          info: ''
         },
         {
           title: '个性化推荐',
-          recommend: this.recommendResource
+          recommend: this.recommendResource,
+          info: ''
         },
         {
           title: '热门新碟',
-          recommend: this.albumNewest
+          recommend: this.albumNewest,
+          info: ''
         },
         {
           title: '电台推荐',
-          recommend: this.djRecommend
+          recommend: this.djRecommend,
+          info: ''
         }
       ]
     },
@@ -115,7 +127,7 @@ export default {
     catalogBtnClickHandle(id) {
       switch (id) {
         case 0:
-          this.setTips('此功能还未开发，尽情期待');
+          this.setDevelopingTips();
           break;
         case 1:
           this.$router.push({
@@ -123,15 +135,18 @@ export default {
           });
           break;
         case 2:
-          this.setTips('此功能还未开发，尽情期待');
+          this.setDevelopingTips();
           break;
         case 3:
-          this.setTips('此功能还未开发，尽情期待');
+          this.setDevelopingTips();
           break;
       
         default:
           break;
       }
+    },
+    setDevelopingTips() {
+      this.setTips('此功能正在开发，尽情期待');
     },
     selectSongList(songList) {
       this.$router.push({
@@ -172,7 +187,7 @@ export default {
         }
       }).catch(err => {
         if (err.response.data.code === NEED_LOGIN) {
-          this.msg = err.response.data.msg;
+          this.setTips('部分功能登录后加载');
         }
       });
     },

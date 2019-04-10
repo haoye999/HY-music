@@ -22,3 +22,5 @@ export const userId = state => state.userId;
 export const tips = state => state.tips;
 
 export const songList = state => state.songList;
+
+export const loginWay = state => state.loginWay;

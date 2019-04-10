@@ -11,11 +11,12 @@
 </template>
 
 <script>
-import { ERR_OK } from 'api/config';
+import { ERR_OK, NEED_LOGIN } from 'api/config';
 import { createSong } from 'assets/js/song';
 import { getRecommendSongs } from 'src/api/recommend';
 
 import MusicList from 'components/music-list/music-list.vue';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'song-list-detail',
@@ -50,6 +51,10 @@ export default {
           this.songs = this._normalizeSongs(data.recommend);
           this.bgImg = this.songs[0].image;
         }
+      }).catch((e) => {
+        if (e.response.status === NEED_LOGIN) {
+          this.setTips('请先登录');
+        }
       })
     },
     _normalizeSongs(hotSongs) {
@@ -59,6 +64,9 @@ export default {
       });
       return ret;
     },
+    ...mapMutations({
+      setTips: 'SET_TIPS'
+    })
   },
   components: {
     MusicList

@@ -1,21 +1,34 @@
 <template>
-  <div class="login-cell">
+  <div class="login-ways">
     <div class="nav">
       <div class="back" @click="back">
         <i class="iconfont icon-back icon"></i>
       </div>
-      <h1 class="title">手机号登录</h1>
+      <h1 class="title">{{ loginWayTitle }}</h1>
     </div>
-    <div class="form-wrapper">
+    <div v-if="loginWay === 'cell'" class="form-wrapper">
       <form method="get" class="form">
         <label class="input">
-          <input ref="phone" type="text" name="cell" placeholder="请输入手机号">
+          <input ref="phone" type="tel" name="cell" placeholder="请输入手机号">
         </label>
         <label class="input">
           <input ref="password" type="password" name="password" placeholder="请输入密码">
         </label>
         <div class="btn-wrapper">
-          <button type="submit" @click.prevent="login">登陆</button>        
+          <button type="submit" @click.prevent="_loginCell">登录</button>        
+        </div>
+      </form>
+    </div>
+    <div v-if="loginWay === 'email'" class="form-wrapper">
+      <form method="get" class="form">
+        <label class="input">
+          <input ref="email" type="email" name="email" placeholder="请输入您的邮箱">
+        </label>
+        <label class="input">
+          <input ref="ePassword" type="password" name="e-password" placeholder="请输入密码">
+        </label>
+        <div class="btn-wrapper">
+          <button type="submit" @click.prevent="_loginMail">登录</button>        
         </div>
       </form>
     </div>
@@ -23,8 +36,8 @@
 </template>
 
 <script>
-import { loginCell } from 'api/user';
-import { ERR_OK, NEED_LOGIN, WRONG_PWD } from 'api/config';
+import { loginCell, loginMail } from 'api/user';
+import { ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING } from 'api/config';
 import { mapGetters, mapMutations } from 'vuex';
 
 export default {
@@ -35,20 +48,21 @@ export default {
     }
   },
   computed: {
+    loginWayTitle() {
+      return this.loginWay === 'cell' ? '手机号登录' : '邮箱登陆';
+    },
     ...mapGetters([
-      'loggedin'
+      'loggedin',
+      'loginWay'
     ])
   },
   methods: {
     back() {
       this.$router.go(-1);
     },
-    login() {
+    _loginCell() {
       let phone = this.$refs.phone.value;
       let password = this.$refs.password.value;
-      this._login(phone, password);
-    },
-    _login(phone, password) {
       loginCell({
         phone,
         password
@@ -67,6 +81,32 @@ export default {
         this.setTips(err.response.data.msg);
       })
     },
+    _loginMail() {
+      let email = this.$refs.email.value;
+      let password = this.$refs.ePassword.value;
+      loginMail({
+        email,
+        password
+      }).then(data => {
+        console.log(data);
+        if (data.code === ERR_OK) {
+          this.setLoggedin(true);
+          this.setUserId(data.account.id);
+          this.setTips(`${data.profile.nickname}，你已经成功登录`);
+          this.back();
+          setTimeout(() => {
+            this.$router.push('/recommend');
+          }, 2000);
+        }
+      }).catch(err => {
+        if (err.response.data.code === CHEATING) {
+          this.setTips('邮箱登陆方式出现问题，请改用手机登录');
+          this.back();
+          return;
+        }
+        this.setTips(err.response.data.msg);
+      })
+    },
     ...mapMutations({
       setLoggedin: 'SET_LOGGEDIN',
       setUserId: 'SET_USER_ID',
@@ -79,7 +119,7 @@ export default {
 <style lang="less" scoped>
 @import '~assets/style/variable.less';
 
-.login-cell {
+.login-ways {
   position: absolute;
   top: 0;
   left: 0;

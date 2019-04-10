@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="loading-container" v-show="!recommendList.length">
-      <loading ></loading>
+      <loading :info="info"/>
     </div>
     <list-title>{{ title }}</list-title>
     <ul class="recommend-list">
@@ -20,11 +20,15 @@ export default {
   props: {
     recommendList: {
       type: Array,
-      default: []
+      default: () => []
     },
     title: {
       type: String,
       default: '歌单'
+    },
+    info: {
+      type: String,
+      default: ''
     }
   },
   components: {

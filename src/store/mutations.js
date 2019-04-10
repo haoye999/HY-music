@@ -34,6 +34,9 @@ const mutations = {
   },
   [types.SET_SONG_LIST](state, songList) {
     state.songList = songList;
+  },
+  [types.SET_LOGIN_WAY](state, loginWay) {
+    state.loginWay = loginWay;
   }
 };
 

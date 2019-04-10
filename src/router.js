@@ -67,9 +67,9 @@ export default new Router({
       component: () => import('components/login/login.vue'),
       children: [
         {
-          path: '/login/logincell',
-          name: 'logincell',
-          component: () => import('components/login/login-cell.vue')
+          path: '/login/loginways',
+          name: 'loginways',
+          component: () => import('components/login/login-ways.vue')
         }
       ]
     },

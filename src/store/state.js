@@ -11,7 +11,8 @@ const state = {
   sequenceList: [],
   mode: playMode.sequence,
   currentIndex: -1,
-  loggedin: true
+  loggedin: true,
+  loginWay: ''
 };
 
 export default state;

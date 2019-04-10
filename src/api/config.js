@@ -8,3 +8,4 @@ export const commonParams = {
 export const ERR_OK = 200;
 export const NEED_LOGIN = 301;
 export const WRONG_PWD = 502;
+export const CHEATING = -460;
