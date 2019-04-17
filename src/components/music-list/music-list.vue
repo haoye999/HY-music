@@ -5,7 +5,7 @@
     </div>
     <h1 class="music-list-title" v-show="titleShow">{{ title }}</h1>
     <div class="background" ref="background" :style="backgroundPaddingTop">
-      <div class="background-image" :style="backgroundImageBlur" ref="backgroundImage"></div>
+      <div class="background-image" ref="backgroundImage"></div>
       <div class="top-block" :style="topBlockOpacity" ref="topBlock"></div>
       <slot></slot>
     </div>
@@ -63,9 +63,6 @@ export default {
       this.backgroundPaddingTopPx = Math.max(this.initTop + this.scrollY, MIN_PADDING_TOP);
       return `padding-top: ${this.backgroundPaddingTopPx}px`;
     },
-    backgroundImageBlur() {
-      return `filter: blur(${Math.floor((-this.scrollY) / 80)}px)`;
-    },
     topBlockOpacity() {
       return `opacity: ${1 - (-this.scrollY) / this.initTop}`;
     },
@@ -76,6 +73,7 @@ export default {
   created() {
     this.probeType = 3;
     this.listenScroll = true;
+    this.throttledUpdateBGImgBlur = _.throttle(this.updateBGImgBlur, 50);
   },
   methods: {
     back() {
@@ -93,6 +91,13 @@ export default {
     },
     scroll(pos) {
       this.scrollY = pos.y;
+      this.throttledUpdateBGImgBlur();
+    },
+    updateBGImgBlur() {
+      if (this.backgroundPaddingTopPx === MIN_PADDING_TOP) {
+        return;
+      }
+      this.$refs.backgroundImage.style.filter = `blur(${Math.floor((-this.scrollY) / 50)}px)`;
     },
     selectItem(item, index) {
       this.selectPlay({
