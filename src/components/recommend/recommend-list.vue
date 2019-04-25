@@ -5,7 +5,7 @@
     </div>
     <list-title>{{ title }}</list-title>
     <ul class="recommend-list">
-      <preview-info v-for="songList in recommendList" :key="songList.id" :info="songList" class="flex-4" @select="$emit('select', $event)"></preview-info>
+      <preview-info class="flex-4" v-for="songList in recommendList" :key="songList.id" :info="songList" @select="$emit('select', $event)"></preview-info>
     </ul>
   </div>
 </template>

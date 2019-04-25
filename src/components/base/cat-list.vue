@@ -45,7 +45,7 @@ export default {
     color: @color-theme;
   }
   .disabled {
-    color: grey;
+    color: @color-disabled;
   }
 }
 </style>

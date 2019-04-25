@@ -1,7 +1,6 @@
 <template>
   <div class="preview-info" @click="$emit('select', info)">
-    <div ref="imgContent" class="img-content">
-      <img v-lazy="imgSrc" alt="封面">
+    <div ref="imgContent" v-lazy:background-image="imgSrc" class="img-content">
       <div class="mask"></div>
       <div class="play-count" v-if="info.playCount || info.playcount">
         <i class="iconfont icon-listen icon"></i>
@@ -52,10 +51,8 @@ export default {
     border-radius: 5px;
     overflow: hidden;
     position: relative;
-    img {
-      display: block;
-      width: 100%;
-    }
+    padding: 100% 0 0 0;
+    background: center / cover no-repeat;
     .mask {
       position: absolute;
       top: 0;

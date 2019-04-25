@@ -1,18 +1,20 @@
 <template>
   <div class="recommend">
     <!-- 轮播图 -->
-    <div class="slider-content" v-if="banners.length">
-      <slider>
-        <div v-for="banner in banners" :key="banner.imageUrl">
-          <a>
-            <img :src="httpsify(banner.imageUrl)" alt="banner">
-            <span
-              class="type-title"
-              :style="`background: ${banner.titleColor}`"
-            >{{ banner.typeTitle }}</span>
-          </a>
-        </div>
-      </slider>
+    <div class="slider-content">
+      <div v-if="banners.length">
+        <slider>
+          <div v-for="banner in banners" :key="banner.imageUrl">
+            <a>
+              <img :src="httpsify(banner.imageUrl)" alt="banner">
+              <span
+                class="type-title"
+                :style="`background: ${banner.titleColor}`"
+              >{{ banner.typeTitle }}</span>
+            </a>
+          </div>
+        </slider>        
+      </div>
     </div>
     <div class="catalog-content">
       <catalog-btn class="flex-3" v-for="catalog in catalogs" :key="catalog.id" :catalog="catalog" @click="catalogBtnClickHandle">
@@ -240,7 +242,8 @@ export default {
   .slider-content {
     position: relative;
     overflow: hidden;
-    margin: 0 12px;
+    margin: 0 4vw;
+    height: 92vw * 400 / 1080;
     font-size: 0;
     border-radius: 8px;
     .type-title {
