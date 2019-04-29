@@ -242,8 +242,8 @@ export default {
   .slider-content {
     position: relative;
     overflow: hidden;
-    margin: 0 4vw;
-    height: 92vw * 400 / 1080;
+    margin: 0 5vw;
+    height: 90vw * 400 / 1080;
     font-size: 0;
     border-radius: 8px;
     .type-title {

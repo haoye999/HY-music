@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { checkUseful } from 'api/song';
+
 export default {
   name: 'song-list',
   props: {
@@ -21,9 +23,22 @@ export default {
       default: () => []
     }
   },
+  updated() {
+    // this.checkAll();
+  },
   methods: {
     getDesc(song) {
       return `${song.singer} - ${song.album}`;
+    },
+    checkAll() {
+      this.songs.map(song => {
+        checkUseful({
+            id: song.id
+          })
+          .then(data => {
+            song.useful = data.success;
+          })
+      })
     }
   }
 };
@@ -66,6 +81,9 @@ export default {
         overflow: hidden;
       }
     }
+  }
+  .disabled {
+    color: @color-disabled;
   }
 }
 </style>

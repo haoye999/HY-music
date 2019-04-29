@@ -105,6 +105,9 @@ export default {
         index
       });
     },
+    ...mapMutations({
+      setTips: 'SET_TIPS'
+    }),
     ...mapActions([
       'selectPlay'
     ])
