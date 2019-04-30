@@ -73,7 +73,6 @@ export default {
   created() {
     this.probeType = 3;
     this.listenScroll = true;
-    this.throttledUpdateBGImgBlur = _.throttle(this.updateBGImgBlur, 50);
   },
   methods: {
     back() {
@@ -91,7 +90,7 @@ export default {
     },
     scroll(pos) {
       this.scrollY = pos.y;
-      this.throttledUpdateBGImgBlur();
+      this.updateBGImgBlur();
     },
     updateBGImgBlur() {
       if (this.backgroundPaddingTopPx === MIN_PADDING_TOP) {
