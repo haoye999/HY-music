@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     getSingerAvatar(url) {
-      return httpsify(`${url}?param=80y80`);
+      return httpsify(`${url}?param=120y120`);
     }
   }
 };
@@ -37,8 +37,7 @@ export default {
     height: 70px;
     border-radius: 50%;
     overflow: hidden;
-    background-position: center center;
-    background-repeat: no-repeat;
+    background: center / cover no-repeat;
   }
   .sing-name {
     font-size: @font-size-medium-s;

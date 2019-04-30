@@ -149,16 +149,14 @@ export default {
     .form {
       height: 100%;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
+      padding: 0 20px;
       .input {
+        display: block;
         height: 30px;
-        width: 90%;
+        margin: 0 0 40px 0;
         input {
-          height: 100%;
           width: 100%;
+          height: 100%;
           padding: 0 0 0 5px;
           border: none;
           border-bottom: 1px solid @color-background-d;
@@ -169,6 +167,7 @@ export default {
         }
       }
       .btn-wrapper {
+        margin: 0 auto;
         width: 80%;
         button {
           height: 35px;
