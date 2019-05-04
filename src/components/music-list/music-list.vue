@@ -93,10 +93,13 @@ export default {
       this.updateBGImgBlur();
     },
     updateBGImgBlur() {
-      if (this.backgroundPaddingTopPx === MIN_PADDING_TOP) {
+      let curBlur = Math.floor((-this.scrollY) / 50);
+      if (this.backgroundPaddingTopPx === MIN_PADDING_TOP || this.lastBlur === curBlur) {
         return;
       }
-      this.$refs.backgroundImage.style.filter = `blur(${Math.floor((-this.scrollY) / 50)}px)`;
+      this.$refs.backgroundImage.style.filter = `blur(${curBlur}px)`;
+      this.lastBlur = curBlur;
+      
     },
     selectItem(item, index) {
       this.selectPlay({
