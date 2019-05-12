@@ -39,11 +39,10 @@
             </div>
           </div>
           <scroll ref="lyricScroll" class="middle-r" :data="lyric">
-            <div>
+            <div ref="lyricScrollContent">
               <div
                 :class="{ active: index === currentLyricIndex }"
                 class="lyric-sentence"
-                ref="lyricSentence"
                 v-for="(sentence, index) in lyric"
                 :key="sentence.startTime"
               >
@@ -206,7 +205,10 @@ export default {
       this.currentLyricIndex = currentIndex;
 
       const currentIndexTop = Math.max(currentIndex - 5, 0);
-      this.$refs.lyricScroll.scrollToElement(this.$refs.lyricSentence[currentIndexTop], 300);
+      this.$refs.lyricScroll.scrollToElement(
+        this.$refs.lyricScrollContent.children[currentIndexTop],
+        300
+      );
     },
     /**
      * touchstart 事件回调
@@ -548,7 +550,8 @@ export default {
             color: @color-theme;
           }
         }
-        &:before, &:after {
+        &:before,
+        &:after {
           content: '';
           position: absolute;
           width: 100%;
