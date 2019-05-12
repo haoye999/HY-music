@@ -40,19 +40,43 @@ export function shuffle(list) {
 export function parseLyric(lyric) {
   const lyricSentence = lyric.split('\n');
   lyricSentence.pop();
+  const result = [];
+  let padNum = 5;
 
-  lyricSentence.forEach((sentence, index) => {
-    if (sentence === '') {
+  while (padNum--) {
+    result.push({
+      startTime: padNum - Number.MAX_SAFE_INTEGER,
+      sentence: ''
+    });
+  }
+
+  lyricSentence.forEach(item => {
+    if (item === '') {
       return;
     }
     const regExp = /\[(.*)\](.*)/;
-    const matches = sentence.match(regExp);
+    // eslint-disable-next-line prefer-const
+    let [, startTime, sentence] = item.match(regExp);
+    if (sentence === '') {
+      return;
+    }
+    const startTimeArr = startTime.split(':');
+    startTime = startTimeArr[0] * 60 + parseFloat(startTimeArr[1]);
 
-    lyricSentence[index] = {
-      startTime: matches[1],
-      sentence: matches[2]
-    };
+    result.push({
+      startTime,
+      sentence
+    });
   });
 
-  return lyricSentence;
+  padNum = 5;
+
+  while (padNum--) {
+    result.push({
+      startTime: Number.MAX_SAFE_INTEGER - padNum,
+      sentence: ''
+    });
+  }
+
+  return result;
 }

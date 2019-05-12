@@ -38,9 +38,15 @@
               </div>
             </div>
           </div>
-          <scroll class="middle-r" :data="lyric">
+          <scroll ref="lyricScroll" class="middle-r" :data="lyric">
             <div>
-              <div class="lyric-sentence" v-for="sentence in lyric" :key="sentence.startTime">
+              <div
+                :class="{ active: index === currentLyricIndex }"
+                class="lyric-sentence"
+                ref="lyricSentence"
+                v-for="(sentence, index) in lyric"
+                :key="sentence.startTime"
+              >
                 {{ sentence.sentence }}
               </div>
             </div>
@@ -148,6 +154,7 @@ import { ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING } from 'api/config';
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
 import PlayList from 'components/play-list/play-list.vue';
 import Scroll from 'components/base/scroll/scroll.vue';
+import { clearTimeout } from 'timers';
 
 export default {
   name: 'player',
@@ -159,7 +166,8 @@ export default {
       lyric: null,
       middleTouch: {
         lastTranslateX: 0
-      }
+      },
+      currentLyricIndex: 0
     };
   },
   computed: {
@@ -189,6 +197,17 @@ export default {
     ])
   },
   methods: {
+    /**
+     * 随着播放时间更新歌词组件
+     */
+    updateLyric(currentTime) {
+      const currentIndex =
+        this.lyric.findIndex(item => item.startTime >= currentTime + 0.3) - 1;
+      this.currentLyricIndex = currentIndex;
+
+      const currentIndexTop = Math.max(currentIndex - 5, 0);
+      this.$refs.lyricScroll.scrollToElement(this.$refs.lyricSentence[currentIndexTop], 300);
+    },
     /**
      * touchstart 事件回调
      * 初始化 this.middleTouch, 记录初始 pageX
@@ -240,7 +259,12 @@ export default {
       setTimeout(() => {
         this.$refs.middle.style.transition = '';
       }, 300);
-      this.middleTouch.init = false;
+
+      // 延时取消初始化标记，以便有停留时间
+      clearTimeout(timer);
+      const timer = setTimeout(() => {
+        this.middleTouch.init = false;
+      }, 3000);
     },
     openPlayList() {
       this.showPlayList = true;
@@ -359,13 +383,19 @@ export default {
         .then(data => {
           if (data.code === ERR_OK) {
             this.lyric = parseLyric(data.lrc.lyric);
-            console.log(this.lyric);
+            console.log(parseLyric(data.lrc.lyric));
           }
         })
         .catch(err => {
           this.set;
           throw err;
         });
+    },
+    currentTime(newTime, pldTime) {
+      if (this.middleTouch.init) {
+        return;
+      }
+      this.updateLyric(newTime);
     },
     playing(newPlaying) {
       const { audio } = this.$refs;
@@ -509,10 +539,26 @@ export default {
         flex: 1;
         z-index: 100;
         overflow: hidden;
-        padding: 20px;
+        position: relative;
+        margin: 30px 0 30px 0;
         .lyric-sentence {
           text-align: center;
-          height: 30px;
+          height: 40px;
+          &.active {
+            color: @color-theme;
+          }
+        }
+        &:before, &:after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 50%;
+          // background: linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0) 30%) no-repeat;
+          z-index: 1;
+        }
+        &:after {
+          bottom: 0;
+          // background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 30%) no-repeat;
         }
       }
     }
