@@ -2,13 +2,27 @@
   <div class="singer">
     <div class="cat-content">
       <div class="cat-region-content cat-sub-content">
-        <cat-list :list-items="catRegion" :list-item-active="catRegionIndex" @changeList="changeCatRegion($event)"></cat-list>
+        <cat-list
+          :list-items="catRegion"
+          :list-item-active="catRegionIndex"
+          @changeList="changeCatRegion($event)"
+        ></cat-list>
       </div>
       <div class="cat-sex-content cat-sub-content">
-        <cat-list :disabled="!~~catRegionIndex" :list-items="catSex" :list-item-active="catSexIndex" @changeList="changeCatSex($event)"></cat-list>
+        <cat-list
+          :disabled="!~~catRegionIndex"
+          :list-items="catSex"
+          :list-item-active="catSexIndex"
+          @changeList="changeCatSex($event)"
+        ></cat-list>
       </div>
       <div class="cat-initial-content cat-sub-content">
-        <cat-list :disabled="!~~catRegionIndex" :list-items="catInitial" :list-item-active="catInitialIndex" @changeList="changeCatInitial($event)"></cat-list>
+        <cat-list
+          :disabled="!~~catRegionIndex"
+          :list-items="catInitial"
+          :list-item-active="catInitialIndex"
+          @changeList="changeCatInitial($event)"
+        ></cat-list>
       </div>
     </div>
 
@@ -16,7 +30,13 @@
       <div class="loading-container">
         <loading v-show="!singers.length"></loading>
       </div>
-      <singer-item v-for="singer in singers" class="singer-item flex-3" :key="singer.id" :singer=singer @select="selectSinger($event)" />
+      <singer-item
+        v-for="singer in singers"
+        class="singer-item flex-3"
+        :key="singer.id"
+        :singer="singer"
+        @select="selectSinger($event)"
+      />
     </div>
     <transition name="singer-detail-router-fade" mode="out-in">
       <router-view></router-view>
@@ -39,7 +59,12 @@ export default {
     return {
       singers: [],
       catRegion: {
-        0: '热门', 1: '华语', 2: '欧美', 6: '日本', 7: '韩国', 4: '其他'
+        0: '热门',
+        1: '华语',
+        2: '欧美',
+        6: '日本',
+        7: '韩国',
+        4: '其他'
       },
       catSex: { 1: '男', 2: '女', 3: '乐队/组合' },
       catRegionIndex: '0',
@@ -75,13 +100,15 @@ export default {
       getTopArtists({
         offset,
         limit
-      }).then(data => {
-        if (data.code === ERR_OK) {
-          this.singers = data.artists;
-        }
-      }).catch(err => {
-        throw (err);
-      });
+      })
+        .then(data => {
+          if (data.code === ERR_OK) {
+            this.singers = data.artists;
+          }
+        })
+        .catch(err => {
+          throw err;
+        });
     },
     _getArtistList() {
       if (this.catRegionIndex === '0') {
@@ -92,14 +119,18 @@ export default {
         cat: this.cat,
         limit: 100,
         offset: 0,
-        initial: this.catInitial[this.catInitialIndex].match(/[a-z]/) ? this.catInitial[this.catInitialIndex] : ''
-      }).then(data => {
-        if (data.code === ERR_OK) {
-          this.singers = data.artists;
-        }
-      }).catch(err => {
-        throw (err);
-      });
+        initial: this.catInitial[this.catInitialIndex].match(/[a-z]/)
+          ? this.catInitial[this.catInitialIndex]
+          : ''
+      })
+        .then(data => {
+          if (data.code === ERR_OK) {
+            this.singers = data.artists;
+          }
+        })
+        .catch(err => {
+          throw err;
+        });
     },
     changeCatRegion(index) {
       this.catRegionIndex = index;
@@ -134,7 +165,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.singer {  
+.singer {
   margin: 95px 0 50px 0;
   overflow: hidden;
   .cat-content {
@@ -152,7 +183,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     position: relative;
-    min-height: 100px;
+    min-height: 100vh;
     .singer-item {
       margin: 16px 0 0 0;
     }

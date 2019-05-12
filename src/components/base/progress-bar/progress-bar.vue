@@ -46,7 +46,6 @@ export default {
     progressTouchStart(e) {
       this.touch.init = true;
       this.touch.startX = e.touches[0].pageX;
-      // 没移动会有问题
       this.touch.newPercent = this.percent;
     },
     progressTouchMove(e) {

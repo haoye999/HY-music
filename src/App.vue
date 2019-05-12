@@ -34,23 +34,22 @@ export default {
     this._getLoginStatus();
   },
   computed: {
-    ...mapGetters([
-      'loggedin',
-      'tips'
-    ])
+    ...mapGetters(['loggedin', 'tips'])
   },
   methods: {
     _getLoginStatus() {
-      getLoginStatus().then(data => {
-        if (data.code === ERR_OK) {
-          this.setLoggedin(true);
-          this.setUserId(data.profile.userId);
-        }
-      }).catch(e => {
-        if(e.response.data.code === NEED_LOGIN) {
-          this.setLoggedin(false);
-        }
-      });
+      getLoginStatus()
+        .then(data => {
+          if (data.code === ERR_OK) {
+            this.setLoggedin(true);
+            this.setUserId(data.profile.userId);
+          }
+        })
+        .catch(e => {
+          if (e.response.data.code === NEED_LOGIN) {
+            this.setLoggedin(false);
+          }
+        });
     },
     ...mapMutations({
       setLoggedin: 'SET_LOGGEDIN',

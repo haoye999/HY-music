@@ -11,3 +11,13 @@ export function checkUseful(params) {
 
   return axios(options).then(res => res.data);
 }
+
+export function getLyric(params) {
+  const options = {
+    methods: 'GET',
+    url: `${commonParams.host}/lyric`,
+    params
+  };
+
+  return axios(options).then(res => res.data);
+}

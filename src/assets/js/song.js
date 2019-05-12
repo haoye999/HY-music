@@ -1,3 +1,5 @@
+import { checkUseful, getLyric } from 'api/song';
+
 export default class Song {
   constructor({
     id, mid, name, alia, singer, album, albumId, duration, image, url, useful
@@ -13,6 +15,18 @@ export default class Song {
     this.image = image;
     this.url = url;
     this.useful = useful;
+  }
+
+  getLyric() {
+    return getLyric({
+      id: this.id
+    });
+  }
+
+  checkUseful() {
+    return checkUseful({
+      id: this.id
+    });
   }
 }
 

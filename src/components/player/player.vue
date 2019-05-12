@@ -1,5 +1,10 @@
 <template>
-  <div class="player" v-show="playlist.length" @mousewheel.prevent @touchmove.prevent>
+  <div
+    class="player"
+    v-show="playlist.length"
+    @mousewheel.prevent
+    @touchmove.prevent
+  >
     <transition name="normal" :duration="500">
       <div class="normal-player" v-show="fullScreen">
         <div class="background" :style="backgroundImage"></div>
@@ -15,20 +20,41 @@
             <i class="iconfont icon-share"></i>
           </div>
         </div>
-        <div class="middle">
+        <div
+          class="middle"
+          ref="middle"
+          @touchstart="middleTouchStartHandle"
+          @touchmove="middleTouchMoveHandle"
+          @touchend="middleTouchEndHandle"
+        >
           <div class="middle-l">
             <div class="cd-container">
               <div class="cd-wrapper">
-                <div class="cd rotate" :class="{ pause: !playing }" :style="backgroundImage"></div>
+                <div
+                  class="cd rotate"
+                  :class="{ pause: !playing }"
+                  :style="backgroundImage"
+                ></div>
               </div>
             </div>
           </div>
+          <scroll class="middle-r" :data="lyric">
+            <div>
+              <div class="lyric-sentence" v-for="sentence in lyric" :key="sentence.startTime">
+                {{ sentence.sentence }}
+              </div>
+            </div>
+          </scroll>
         </div>
         <div class="bottom">
           <div class="progress-content">
             <div class="current-time">{{ formatTime(currentTime) }}</div>
             <div class="progress-bar-content">
-              <progress-bar ref="progressBarNormal" :percent="percent" @percentChange="percentChange"/>
+              <progress-bar
+                ref="progressBarNormal"
+                :percent="percent"
+                @percentChange="percentChange"
+              />
             </div>
             <div class="duration">{{ formatTime(currentSong.duration) }}</div>
           </div>
@@ -37,13 +63,28 @@
               <i class="iconfont" :class="modeClass" @click="togglemode"></i>
             </div>
             <div class="i-left icon-container">
-              <i class="iconfont icon-verticalright" @click="lastSong" :class="{ disabled: !songReady }"></i>
+              <i
+                class="iconfont icon-verticalright"
+                @click="lastSong"
+                :class="{ disabled: !songReady }"
+              ></i>
             </div>
             <div class="i-center icon-container">
-              <i :class="[playing ? 'icon-timeout' : 'icon-play-circle', { disabled: !songReady }]" @click="togglePlaying" class="iconfont"></i>
+              <i
+                :class="[
+                  playing ? 'icon-timeout' : 'icon-play-circle',
+                  { disabled: !songReady }
+                ]"
+                @click="togglePlaying"
+                class="iconfont"
+              ></i>
             </div>
             <div class="i-right icon-container">
-              <i class="iconfont icon-verticalleft"  :class="{ disabled: !songReady }" @click="nextSong"></i>
+              <i
+                class="iconfont icon-verticalleft"
+                :class="{ disabled: !songReady }"
+                @click="nextSong"
+              ></i>
             </div>
             <div class="i-right icon-container" @click="openPlayList">
               <i class="iconfont icon-indent"></i>
@@ -55,24 +96,43 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen" @click="toggleFullScreen">
         <div class="mini-progress-bar-container">
-          <progress-bar ref="progressBarMini" :percent="percent" @percentChange="percentChange"/>
+          <progress-bar
+            ref="progressBarMini"
+            :percent="percent"
+            @percentChange="percentChange"
+          />
         </div>
-        <div class="avatar rotate" :class="{ pause: !playing }" :style="backgroundImage"></div>
+        <div
+          class="avatar rotate"
+          :class="{ pause: !playing }"
+          :style="backgroundImage"
+        ></div>
         <div class="text">
           <h2 class="name">{{ currentSong.name }}</h2>
           <p class="desc">{{ currentSong.singer }}</p>
         </div>
         <div class="controls">
           <div class="control icon-container">
-            <i :class="[ playing ? 'icon-timeout' : 'icon-play-circle' ]" @click.stop="togglePlaying" class="iconfont"></i>
+            <i
+              :class="[playing ? 'icon-timeout' : 'icon-play-circle']"
+              @click.stop="togglePlaying"
+              class="iconfont"
+            ></i>
           </div>
           <div class="control icon-container">
-            <i class="iconfont icon-indent" @click.stop="openPlayList"></i>          
-          </div>          
+            <i class="iconfont icon-indent" @click.stop="openPlayList"></i>
+          </div>
         </div>
       </div>
     </transition>
-      <audio ref="audio" :src="currentSong.url" @ended="ended" @canplay="canplay" @error="error" @timeupdate="timeupdate"></audio>
+    <audio
+      ref="audio"
+      :src="currentSong.url"
+      @ended="ended"
+      @canplay="canplay"
+      @error="error"
+      @timeupdate="timeupdate"
+    ></audio>
     <transition name="bottom-in-out">
       <play-list v-if="showPlayList" ref="playList" @close="closePlayList" />
     </transition>
@@ -82,10 +142,12 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex';
 import { playMode } from 'assets/js/config';
-import { httpsify, shuffle } from 'assets/js/util';
+import { httpsify, shuffle, parseLyric } from 'assets/js/util';
+import { ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING } from 'api/config';
 
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
 import PlayList from 'components/play-list/play-list.vue';
+import Scroll from 'components/base/scroll/scroll.vue';
 
 export default {
   name: 'player',
@@ -93,15 +155,25 @@ export default {
     return {
       songReady: false,
       currentTime: 0,
-      showPlayList: false
+      showPlayList: false,
+      lyric: null,
+      middleTouch: {
+        lastTranslateX: 0
+      }
     };
   },
   computed: {
-    modeClass(){
-      return this.mode === playMode.sequence ? 'icon-xunhuan' : this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-bofangye-caozuolan-suijibofang'
+    modeClass() {
+      return this.mode === playMode.sequence
+        ? 'icon-xunhuan'
+        : this.mode === playMode.loop
+        ? 'icon-danquxunhuan'
+        : 'icon-bofangye-caozuolan-suijibofang';
     },
     backgroundImage() {
-      return `background: center / cover url(${httpsify(this.currentSong.image)}?param=180y180) no-repeat`;
+      return `background: center / cover url(${httpsify(
+        this.currentSong.image
+      )}?param=180y180) no-repeat`;
     },
     percent() {
       return this.currentTime / this.currentSong.duration;
@@ -117,11 +189,64 @@ export default {
     ])
   },
   methods: {
+    /**
+     * touchstart 事件回调
+     * 初始化 this.middleTouch, 记录初始 pageX
+     */
+    middleTouchStartHandle(e) {
+      this.middleTouch.init = true;
+      this.middleTouch.startX = e.touches[0].pageX;
+      this.middleTouch.startY = e.touches[0].pageY;
+      this.middleTouch.width =
+        this.$refs.middle.clientWidth / this.$refs.middle.children.length;
+    },
+    /**
+     * touchmove 回调
+     */
+    middleTouchMoveHandle(e) {
+      let deltaX = e.touches[0].pageX - this.middleTouch.startX;
+      let deltaY = e.touches[0].pageY - this.middleTouch.startY;
+
+      if (!this.middleTouch.init || Math.abs(deltaX) * 0.5 < Math.abs(deltaY)) {
+        return;
+      }
+
+      this.$refs.middle.style.transform = `translate3d(${deltaX +
+        this.middleTouch.lastTranslateX}px, 0, 0)`;
+      this.middleTouch.deltaX = deltaX;
+    },
+    /**
+     * touchend 回调
+     * 根据 deltaX 的正负性值确定应现实的页面
+     */
+    middleTouchEndHandle(e) {
+      let deltaX = this.middleTouch.deltaX;
+      if (deltaX < -this.middleTouch.width * 0.15) {
+        this.middleTouch.lastTranslateX -= this.middleTouch.width;
+      } else if (deltaX > this.middleTouch.width * 0.15) {
+        this.middleTouch.lastTranslateX += this.middleTouch.width;
+      }
+
+      this.middleTouch.lastTranslateX = Math.max(
+        Math.min(this.middleTouch.lastTranslateX, 0),
+        (-this.$refs.middle.clientWidth / this.$refs.middle.children.length) *
+          (this.$refs.middle.children.length - 1)
+      );
+
+      this.$refs.middle.style.transition = 'transform .3s';
+      this.$refs.middle.style.transform = `translate3d(${
+        this.middleTouch.lastTranslateX
+      }px, 0, 0)`;
+      setTimeout(() => {
+        this.$refs.middle.style.transition = '';
+      }, 300);
+      this.middleTouch.init = false;
+    },
     openPlayList() {
       this.showPlayList = true;
       this.$nextTick(() => {
         this.$refs.playList.scrollToCurrent();
-      })
+      });
     },
     closePlayList() {
       this.showPlayList = false;
@@ -132,22 +257,21 @@ export default {
       if (this.mode === playMode.random) {
         list = this.sequenceList;
         list = shuffle(list);
-        
+
         this.resetCurrentSong(list);
         this.setPlaylist(list);
       }
     },
     resetCurrentSong(list) {
-      let currentIndex = list.findIndex((song) => {
+      let currentIndex = list.findIndex(song => {
         return song.id === this.currentSong.id;
-      })
+      });
 
       this.setCurrentIndex(currentIndex);
     },
     toggleFullScreen() {
       this.fullScreen ? this.setFullScreen(false) : this.setFullScreen(true);
       this.$nextTick(() => {
-        console.log(this.fullScreen);
         this.$refs.progressBarNormal.fresh(this.percent);
         this.$refs.progressBarMini.fresh(this.percent);
       });
@@ -202,7 +326,9 @@ export default {
     },
     formatTime(interval) {
       interval = Math.round(interval);
-      const minutes = Math.round(interval / 60).toString().padStart(2, '0');
+      const minutes = Math.floor(interval / 60)
+        .toString()
+        .padStart(2, '0');
       const seconds = (interval % 60).toString().padStart(2, '0');
       return `${minutes}:${seconds}`;
     },
@@ -215,7 +341,8 @@ export default {
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
       setmode: 'SET_PLAY_MODE',
-      setPlaylist: 'SET_PLAYLIST'
+      setPlaylist: 'SET_PLAYLIST',
+      setTips: 'SET_TIPS'
     })
   },
   watch: {
@@ -227,6 +354,18 @@ export default {
         this.$refs.audio.play();
         this.setPlayingState(true);
       });
+      this.currentSong
+        .getLyric()
+        .then(data => {
+          if (data.code === ERR_OK) {
+            this.lyric = parseLyric(data.lrc.lyric);
+            console.log(this.lyric);
+          }
+        })
+        .catch(err => {
+          this.set;
+          throw err;
+        });
     },
     playing(newPlaying) {
       const { audio } = this.$refs;
@@ -237,13 +376,14 @@ export default {
   },
   components: {
     ProgressBar,
-    PlayList
+    PlayList,
+    Scroll
   }
 };
 </script>
 
 <style lang="less" scoped>
-@import "~assets/style/variable.less";
+@import '~assets/style/variable.less';
 
 .player {
   .normal-player {
@@ -280,7 +420,7 @@ export default {
       width: 100%;
       height: 100%;
       filter: blur(40px);
-      transition: background-image .3s;
+      transition: background-image 0.3s;
     }
     .top {
       position: absolute;
@@ -326,9 +466,12 @@ export default {
     .middle {
       position: absolute;
       top: 40px;
-      width: 100%;
+      width: 200%;
       height: 75%;
+      display: flex;
       .middle-l {
+        flex: 1;
+        position: relative;
         .cd-container {
           position: absolute;
           top: 50%;
@@ -357,9 +500,19 @@ export default {
               width: 100%;
               height: 100%;
               background: center / cover no-repeat;
-              transition: background-image .3s;
+              transition: background-image 0.3s;
             }
           }
+        }
+      }
+      .middle-r {
+        flex: 1;
+        z-index: 100;
+        overflow: hidden;
+        padding: 20px;
+        .lyric-sentence {
+          text-align: center;
+          height: 30px;
         }
       }
     }
@@ -372,7 +525,8 @@ export default {
         margin-bottom: 10px;
         padding: 0 10px;
         align-items: center;
-        .current-time, .duration {
+        .current-time,
+        .duration {
           font-size: @font-size-small-m;
         }
         .progress-bar-content {
@@ -405,7 +559,7 @@ export default {
     z-index: 149;
     align-items: center;
     background: @color-highlight-background;
-    opacity: .95;
+    opacity: 0.95;
     .mini-progress-bar-container {
       position: absolute;
       top: -6px;
@@ -451,7 +605,7 @@ export default {
         align-items: center;
         justify-content: center;
         i {
-            font-size: 30px;
+          font-size: 30px;
         }
       }
     }
