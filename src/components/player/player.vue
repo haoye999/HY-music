@@ -153,7 +153,6 @@ import { ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING } from 'api/config';
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
 import PlayList from 'components/play-list/play-list.vue';
 import Scroll from 'components/base/scroll/scroll.vue';
-import { clearTimeout } from 'timers';
 
 export default {
   name: 'player',
@@ -262,9 +261,9 @@ export default {
         this.$refs.middle.style.transition = '';
       }, 300);
 
-      // 延时取消初始化标记，以便有停留时间
-      clearTimeout(timer);
-      const timer = setTimeout(() => {
+      // 延时取消初始化标记，以便有最后一次滑动后有停留时间
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
         this.middleTouch.init = false;
       }, 3000);
     },
