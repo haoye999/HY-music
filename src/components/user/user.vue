@@ -79,7 +79,6 @@ export default {
     },
     logout() {
       logout().then((data) => {
-        console.log(data);
         if (data.code === ERR_OK) {
           this.setLoggedin(false);
           this.setUserId(0);

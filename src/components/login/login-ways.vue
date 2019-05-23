@@ -67,7 +67,6 @@ export default {
         phone,
         password
       }).then(data => {
-        console.log(data);
         if (data.code === ERR_OK) {
           this.setLoggedin(true);
           this.setUserId(data.account.id);
@@ -88,7 +87,6 @@ export default {
         email,
         password
       }).then(data => {
-        console.log(data);
         if (data.code === ERR_OK) {
           this.setLoggedin(true);
           this.setUserId(data.account.id);

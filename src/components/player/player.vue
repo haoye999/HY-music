@@ -384,7 +384,6 @@ export default {
         .then(data => {
           if (data.code === ERR_OK) {
             this.lyric = parseLyric(data.lrc.lyric);
-            console.log(parseLyric(data.lrc.lyric));
           }
         })
         .catch(err => {

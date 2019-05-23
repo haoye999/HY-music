@@ -29,7 +29,6 @@ export default {
     ])
   },
   created() {
-    console.log(this.songList);
     this._getSongListDetail();
   },
   methods: {
@@ -44,7 +43,6 @@ export default {
         id: this.songList.id
       }).then(data => {
         if (data.code === ERR_OK) {
-          console.log(data);
           this.songs = this._normalizeSongs(data.playlist.tracks);
         }
       })
