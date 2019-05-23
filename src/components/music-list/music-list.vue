@@ -1,5 +1,5 @@
 <template>
-  <div class="music-list">
+  <div class="music-list" @mousewheel.prevent @touchmove.prevent>
     <div class="back" @click="back">
       <i class="iconfont icon-back icon"></i>
     </div>
@@ -9,7 +9,14 @@
       <div class="top-block" :style="topBlockOpacity" ref="topBlock"></div>
       <slot></slot>
     </div>
-    <scroll @scroll="scroll" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" class="list" ref="list">
+    <scroll
+      @scroll="scroll"
+      :data="songs"
+      :probe-type="probeType"
+      :listen-scroll="listenScroll"
+      class="list"
+      ref="list"
+    >
       <div class="song-list-wrapper">
         <div class="loading-container">
           <loading v-show="!songs.length"></loading>
@@ -23,12 +30,10 @@
 <script>
 import SongList from 'components/base/song-list.vue';
 import Scroll from 'components/base/scroll/scroll.vue';
-import Loading from 'components/base/loading';
+import Loading from 'components/base/loading.vue';
 import { httpsify } from 'assets/js/util';
 
 import { mapMutations, mapActions } from 'vuex';
-
-import lodash from 'lodash';
 
 const MIN_PADDING_TOP = 40;
 
@@ -60,11 +65,14 @@ export default {
   },
   computed: {
     backgroundPaddingTop() {
-      this.backgroundPaddingTopPx = Math.max(this.initTop + this.scrollY, MIN_PADDING_TOP);
+      this.backgroundPaddingTopPx = Math.max(
+        this.initTop + this.scrollY,
+        MIN_PADDING_TOP
+      );
       return `padding-top: ${this.backgroundPaddingTopPx}px`;
     },
     topBlockOpacity() {
-      return `opacity: ${1 - (-this.scrollY) / this.initTop}`;
+      return `opacity: ${1 - -this.scrollY / this.initTop}`;
     },
     titleShow() {
       return this.backgroundPaddingTopPx === MIN_PADDING_TOP;
@@ -82,10 +90,12 @@ export default {
       if (this.bgImg === '') {
         return;
       }
-      let image = new Image();
+      const image = new Image();
       image.onload = () => {
-        this.$refs.backgroundImage.style.backgroundImage = `url(${httpsify(this.bgImg)}?param=400y325)`;
-      }
+        this.$refs.backgroundImage.style.backgroundImage = `url(${httpsify(
+          this.bgImg
+        )}?param=400y325)`;
+      };
       image.src = `${httpsify(this.bgImg)}?param=400y325`;
     },
     scroll(pos) {
@@ -93,13 +103,14 @@ export default {
       this.updateBGImgBlur();
     },
     updateBGImgBlur() {
-      let curBlur = Math.floor((-this.scrollY) / 50);
-      if (this.backgroundPaddingTopPx === MIN_PADDING_TOP || this.lastBlur === curBlur) {
+      const curBlur = Math.floor(-this.scrollY / 50);
+      if (
+        this.backgroundPaddingTopPx === MIN_PADDING_TOP || this.lastBlur === curBlur
+      ) {
         return;
       }
       this.$refs.backgroundImage.style.filter = `blur(${curBlur}px)`;
       this.lastBlur = curBlur;
-      
     },
     selectItem(item, index) {
       this.selectPlay({
@@ -110,12 +121,10 @@ export default {
     ...mapMutations({
       setTips: 'SET_TIPS'
     }),
-    ...mapActions([
-      'selectPlay'
-    ])
+    ...mapActions(['selectPlay'])
   },
   mounted() {
-    this.initTop = this.$refs.background.clientWidth * this.bgHeight / 100;
+    this.initTop = (this.$refs.background.clientWidth * this.bgHeight) / 100;
     this.$refs.background.style.paddingTop = `${this.initTop}px`;
     this.$refs.list.$el.style.top = `${this.initTop}px`;
     this.loadImage();
@@ -187,8 +196,9 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-      transition: background-image .5s;
-      background: no-repeat center / cover url(https://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg);
+      transition: background-image 0.5s;
+      background: no-repeat center / cover
+        url(https://p4.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg);
     }
   }
   .list {
