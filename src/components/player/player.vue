@@ -606,7 +606,6 @@ export default {
     z-index: 149;
     align-items: center;
     background: @color-highlight-background;
-    opacity: 0.95;
     .mini-progress-bar-container {
       position: absolute;
       top: -6px;

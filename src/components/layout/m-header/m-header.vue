@@ -9,7 +9,7 @@
       <h1 class="title">HY Music</h1>
     </div>
     <div class="space-hold"></div>
-    <div class="search-content">
+    <div class="search-content" to="search" @click="$emit('openSearch')">
       <i class="iconfont icon-search search"></i>
     </div>
   </header>

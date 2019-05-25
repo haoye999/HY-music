@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-    <m-header></m-header>
-    <tab></tab>
+    <m-header @openSearch="handleOpenSearch" />
+    <tab />
     <transition name="root-router-fade" mode="out-in">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </transition>
-    <player></player>
+    <player />
+    <search v-if="openSearch" @closeSearch="handleCloseSearch" />
     <transition name="tips" mode="out-in">
       <div v-if="tips" class="tips">{{ tips }}</div>
     </transition>
@@ -18,6 +19,7 @@
 import MHeader from 'components/layout/m-header/m-header.vue';
 import Tab from 'components/layout/tab/tab.vue';
 import Player from 'components/player/player.vue';
+import Search from 'components/search/search.vue';
 
 import { mapGetters, mapMutations } from 'vuex';
 import { loginCell, getLoginStatus } from 'api/user';
@@ -25,10 +27,16 @@ import { ERR_OK, NEED_LOGIN } from 'api/config';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      openSearch: false
+    }
+  },
   components: {
     MHeader,
     Tab,
-    Player
+    Player,
+    Search
   },
   created() {
     this._getLoginStatus();
@@ -37,6 +45,12 @@ export default {
     ...mapGetters(['loggedin', 'tips'])
   },
   methods: {
+    handleOpenSearch() {
+      this.openSearch = true;
+    },
+    handleCloseSearch() {
+      this.openSearch = false;
+    },
     _getLoginStatus() {
       getLoginStatus()
         .then(data => {
