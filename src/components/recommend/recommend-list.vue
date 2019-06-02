@@ -36,7 +36,7 @@ export default {
     PreviewInfo,
     ListTitle
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

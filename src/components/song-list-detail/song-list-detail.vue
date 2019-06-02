@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       songs: []
-    }
+    };
   },
   computed: {
     ...mapGetters([
@@ -45,7 +45,7 @@ export default {
         if (data.code === ERR_OK) {
           this.songs = this._normalizeSongs(data.playlist.tracks);
         }
-      })
+      });
     },
     _normalizeSongs(hotSongs) {
       const ret = [];
@@ -55,12 +55,12 @@ export default {
         }
       });
       return ret;
-    },
+    }
   },
   components: {
     MusicList
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

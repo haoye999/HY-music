@@ -28,7 +28,7 @@ export default {
         date: 1,
         month: 1
       }
-    }
+    };
   },
   created() {
     this._getRecommendSongs();
@@ -39,11 +39,11 @@ export default {
       this.$router.go(-1);
     },
     getTime() {
-      let date = new Date;
+      const date = new Date();
       this.time = {
         date: date.getDate().toString().padStart(2, '0'),
         month: (date.getMonth() + 1).toString().padStart(2, '0')
-      }
+      };
     },
     _getRecommendSongs() {
       getRecommendSongs().then(data => {
@@ -51,11 +51,11 @@ export default {
           this.songs = this._normalizeSongs(data.recommend);
           this.bgImg = this.songs[0].image;
         }
-      }).catch((e) => {
+      }).catch(e => {
         if (e.response.status === NEED_LOGIN) {
           this.setTips('请先登录');
         }
-      })
+      });
     },
     _normalizeSongs(hotSongs) {
       const ret = [];
@@ -71,7 +71,7 @@ export default {
   components: {
     MusicList
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

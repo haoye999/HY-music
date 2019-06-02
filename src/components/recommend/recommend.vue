@@ -13,7 +13,7 @@
               >{{ banner.typeTitle }}</span>
             </a>
           </div>
-        </slider>        
+        </slider>
       </div>
     </div>
     <div class="catalog-content">
@@ -21,9 +21,9 @@
         <i class="iconfont icon" :class="catalog.icon"></i>
       </catalog-btn>
     </div>
-    
+
     <div class="song-list-wrapper">
-      <recommend-list 
+      <recommend-list
         v-for="recommendList in recommends"
         :key="recommendList.title"
         :title="recommendList.title"
@@ -116,7 +116,7 @@ export default {
           recommend: this.djRecommend,
           info: ''
         }
-      ]
+      ];
     },
     ...mapGetters([
       'loggedin'
@@ -142,7 +142,7 @@ export default {
         case 3:
           this.setDevelopingTips();
           break;
-      
+
         default:
           break;
       }

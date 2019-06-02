@@ -11,7 +11,7 @@ export default {
   props: {
     catalog: {
       type: Object,
-      default: () => { title: '分类' }
+      default: () => { '分类'; }
     }
   }
 };

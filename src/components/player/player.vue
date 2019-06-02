@@ -148,7 +148,7 @@
 import { mapGetters, mapMutations } from 'vuex';
 import { playMode } from 'assets/js/config';
 import { httpsify, shuffle, parseLyric } from 'assets/js/util';
-import { ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING } from 'api/config';
+import { ERR_OK } from 'api/config';
 
 import ProgressBar from 'components/base/progress-bar/progress-bar.vue';
 import PlayList from 'components/play-list/play-list.vue';
@@ -173,8 +173,8 @@ export default {
       return this.mode === playMode.sequence
         ? 'icon-xunhuan'
         : this.mode === playMode.loop
-        ? 'icon-danquxunhuan'
-        : 'icon-bofangye-caozuolan-suijibofang';
+          ? 'icon-danquxunhuan'
+          : 'icon-bofangye-caozuolan-suijibofang';
     },
     backgroundImage() {
       return `background: center / cover url(${httpsify(
@@ -199,8 +199,7 @@ export default {
      * 随着播放时间更新歌词组件
      */
     updateLyric(currentTime) {
-      const currentIndex =
-        this.lyric.findIndex(item => item.startTime >= currentTime + 0.3) - 1;
+      const currentIndex = this.lyric.findIndex(item => item.startTime >= currentTime + 0.3) - 1;
       this.currentLyricIndex = currentIndex;
 
       const currentIndexTop = Math.max(currentIndex - 5, 0);
@@ -217,30 +216,29 @@ export default {
       this.middleTouch.init = true;
       this.middleTouch.startX = e.touches[0].pageX;
       this.middleTouch.startY = e.touches[0].pageY;
-      this.middleTouch.width =
-        this.$refs.middle.clientWidth / this.$refs.middle.children.length;
+      this.middleTouch.width = this.$refs.middle.clientWidth / this.$refs.middle.children.length;
     },
     /**
      * touchmove 回调
      */
     middleTouchMoveHandle(e) {
-      let deltaX = e.touches[0].pageX - this.middleTouch.startX;
-      let deltaY = e.touches[0].pageY - this.middleTouch.startY;
+      const deltaX = e.touches[0].pageX - this.middconstouch.startX;
+      const deltaY = e.touches[0].pageY - this.middleTouch.startY;
 
       if (!this.middleTouch.init || Math.abs(deltaX) * 0.5 < Math.abs(deltaY)) {
         return;
       }
 
-      this.$refs.middle.style.transform = `translate3d(${deltaX +
-        this.middleTouch.lastTranslateX}px, 0, 0)`;
+      this.$refs.middle.style.transform = `translate3d(${deltaX
+        + this.middleTouch.lastTranslateX}px, 0, 0)`;
       this.middleTouch.deltaX = deltaX;
     },
     /**
      * touchend 回调
      * 根据 deltaX 的正负性值确定应现实的页面
      */
-    middleTouchEndHandle(e) {
-      let deltaX = this.middleTouch.deltaX;
+    middleTouchEndHandle() {
+      const { deltaX } = this.middleTouch;
       if (deltaX < -this.middleTouch.width * 0.15) {
         this.middleTouch.lastTranslateX -= this.middleTouch.width;
       } else if (deltaX > this.middleTouch.width * 0.15) {
@@ -249,8 +247,8 @@ export default {
 
       this.middleTouch.lastTranslateX = Math.max(
         Math.min(this.middleTouch.lastTranslateX, 0),
-        (-this.$refs.middle.clientWidth / this.$refs.middle.children.length) *
-          (this.$refs.middle.children.length - 1)
+        (-this.$refs.middle.clientWidth / this.$refs.middle.children.length)
+          * (this.$refs.middle.children.length - 1)
       );
 
       this.$refs.middle.style.transition = 'transform .3s';
@@ -288,14 +286,18 @@ export default {
       }
     },
     resetCurrentSong(list) {
-      let currentIndex = list.findIndex(song => {
-        return song.id === this.currentSong.id;
-      });
+      const currentIndex = list.findIndex(
+        song => song.id === this.currentSong.id
+      );
 
       this.setCurrentIndex(currentIndex);
     },
     toggleFullScreen() {
-      this.fullScreen ? this.setFullScreen(false) : this.setFullScreen(true);
+      if (this.fullScreen) {
+        this.setFullScreen(false);
+      } else {
+        this.setFullScreen(true);
+      }
       this.$nextTick(() => {
         this.$refs.progressBarNormal.fresh(this.percent);
         this.$refs.progressBarMini.fresh(this.percent);
@@ -349,8 +351,8 @@ export default {
     timeupdate(e) {
       this.currentTime = e.target.currentTime;
     },
-    formatTime(interval) {
-      interval = Math.round(interval);
+    formatTime(value) {
+      const interval = Math.round(value);
       const minutes = Math.floor(interval / 60)
         .toString()
         .padStart(2, '0');
@@ -387,11 +389,10 @@ export default {
           }
         })
         .catch(err => {
-          this.set;
           throw err;
         });
     },
-    currentTime(newTime, pldTime) {
+    currentTime(newTime) {
       if (this.middleTouch.init) {
         return;
       }
@@ -400,7 +401,11 @@ export default {
     playing(newPlaying) {
       const { audio } = this.$refs;
       this.$nextTick(() => {
-        newPlaying ? audio.play() : audio.pause();
+        if (newPlaying) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
       });
     }
   },
@@ -554,12 +559,10 @@ export default {
           position: absolute;
           width: 100%;
           height: 50%;
-          // background: linear-gradient(180deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0) 30%) no-repeat;
           z-index: 1;
         }
         &:after {
           bottom: 0;
-          // background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 30%) no-repeat;
         }
       }
     }

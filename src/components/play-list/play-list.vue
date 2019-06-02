@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       showFlag: false
-    }
+    };
   },
   computed: {
     ...mapGetters([
@@ -48,37 +48,32 @@ export default {
     currentMode() {
       if (this.mode === playMode.sequence) {
         return '列表循环';
-      } else if (this.mode === playMode.loop) {
+      } if (this.mode === playMode.loop) {
         return '单曲循环';
-      } else if (this.mode === playMode.random) {
+      } if (this.mode === playMode.random) {
         return '随机播放';
-      } else {
-        return '错了';
       }
+      return '错了';
     },
     indexSequenceList() {
-      this._index = this.sequenceList.findIndex((song) => {
-        return song.id === this.currentSong.id;
-      })
+      this._index = this.sequenceList.findIndex(song => song.id === this.currentSong.id);
       return this._index;
     },
-    modeClass(){
-      return this.mode === playMode.sequence ? 'icon-xunhuan' : this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-bofangye-caozuolan-suijibofang'
-    },
+    modeClass() {
+      return this.mode === playMode.sequence ? 'icon-xunhuan' : this.mode === playMode.loop ? 'icon-danquxunhuan' : 'icon-bofangye-caozuolan-suijibofang';
+    }
   },
   methods: {
     scrollToCurrent() {
       this.$nextTick(() => {
-        let index = Math.max(this._index - 4, 0);
+        const index = Math.max(this._index - 4, 0);
         this.$refs.scroll.scrollToElement(this.$refs.songList[index], 300);
-      })
+      });
     },
     selectItem(selectSong, index) {
       let _index = index;
       if (this.mode === playMode.random) {
-        _index = this.playlist.findIndex((song) => {
-          return song.id === selectSong.id;
-        })
+        _index = this.playlist.findIndex(song => song.id === selectSong.id);
       }
       this.setCurrentIndex(_index);
       this.scrollToCurrent();
@@ -96,7 +91,7 @@ export default {
   components: {
     Scroll
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -167,7 +162,7 @@ export default {
                 -moz-osx-font-smoothing: grayscale;
                 content: '\e7ca'
               }
-            }            
+            }
           }
           i {
             color: @color-text-d;
@@ -189,7 +184,7 @@ export default {
         color: @color-text-light;
         background: @color-background;
         letter-spacing: 4px;
-      }      
+      }
     }
   }
 }

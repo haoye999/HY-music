@@ -8,9 +8,11 @@
       </keep-alive>
     </transition>
     <player />
-    <search v-if="openSearch" @closeSearch="handleCloseSearch" />
+    <transition name="right-in-out" mode="out-in">
+      <search v-if="openSearch" @closeSearch="handleCloseSearch" />
+    </transition>
     <transition name="tips" mode="out-in">
-      <div v-if="tips" class="tips">{{ tips }}</div>
+      <div v-show="tips" class="tips">{{ tips }}</div>
     </transition>
   </div>
 </template>
@@ -22,7 +24,7 @@ import Player from 'components/player/player.vue';
 import Search from 'components/search/search.vue';
 
 import { mapGetters, mapMutations } from 'vuex';
-import { loginCell, getLoginStatus } from 'api/user';
+import { getLoginStatus } from 'api/user';
 import { ERR_OK, NEED_LOGIN } from 'api/config';
 
 export default {
@@ -30,7 +32,7 @@ export default {
   data() {
     return {
       openSearch: false
-    }
+    };
   },
   components: {
     MHeader,
@@ -72,7 +74,7 @@ export default {
     })
   },
   watch: {
-    tips(newTips, oldTips) {
+    tips(newTips) {
       if (newTips !== '') {
         setTimeout(() => {
           this.setTips('');

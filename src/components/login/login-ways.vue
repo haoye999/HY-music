@@ -15,7 +15,7 @@
           <input ref="password" type="password" name="password" placeholder="请输入密码">
         </label>
         <div class="btn-wrapper">
-          <button type="submit" @click.prevent="_loginCell">登录</button>        
+          <button type="submit" @click.prevent="_loginCell">登录</button>
         </div>
       </form>
     </div>
@@ -28,7 +28,7 @@
           <input ref="ePassword" type="password" name="e-password" placeholder="请输入密码">
         </label>
         <div class="btn-wrapper">
-          <button type="submit" @click.prevent="_loginMail">登录</button>        
+          <button type="submit" @click.prevent="_loginMail">登录</button>
         </div>
       </form>
     </div>
@@ -37,7 +37,9 @@
 
 <script>
 import { loginCell, loginMail } from 'api/user';
-import { ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING } from 'api/config';
+import {
+  ERR_OK, NEED_LOGIN, WRONG_PWD, CHEATING
+} from 'api/config';
 import { mapGetters, mapMutations } from 'vuex';
 
 export default {
@@ -45,7 +47,7 @@ export default {
   data() {
     return {
       info: ''
-    }
+    };
   },
   computed: {
     loginWayTitle() {
@@ -61,8 +63,8 @@ export default {
       this.$router.go(-1);
     },
     _loginCell() {
-      let phone = this.$refs.phone.value;
-      let password = this.$refs.password.value;
+      const phone = this.$refs.phone.value;
+      const password = this.$refs.password.value;
       loginCell({
         phone,
         password
@@ -78,11 +80,11 @@ export default {
         }
       }).catch(err => {
         this.setTips(err.response.data.msg);
-      })
+      });
     },
     _loginMail() {
-      let email = this.$refs.email.value;
-      let password = this.$refs.ePassword.value;
+      const email = this.$refs.email.value;
+      const password = this.$refs.ePassword.value;
       loginMail({
         email,
         password
@@ -103,7 +105,7 @@ export default {
           return;
         }
         this.setTips(err.response.data.msg);
-      })
+      });
     },
     ...mapMutations({
       setLoggedin: 'SET_LOGGEDIN',
@@ -111,7 +113,7 @@ export default {
       setTips: 'SET_TIPS'
     })
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

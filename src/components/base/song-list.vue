@@ -1,11 +1,19 @@
 <template>
   <ul class="song-list">
-    <li @click="$emit('select', song, index)" v-for="(song, index) in songs" :key="song.id" class="song-item">
+    <li
+      @click="$emit('select', song, index)"
+      v-for="(song, index) in songs"
+      :key="song.id"
+      class="song-item"
+    >
       <div class="song-deco-content flex-1">
         <span class="song-deco">{{ index + 1 }}</span>
       </div>
       <div class="song-info flex-10">
-        <h2 class="song-name">{{ song.name }}<span class="alia" v-if="song.alia"> ({{ song.alia }}) </span></h2>
+        <h2 class="song-name">
+          {{ song.name
+          }}<span class="alia" v-if="song.alia"> ({{ song.alia }}) </span>
+        </h2>
         <h4 class="song-desc">{{ getDesc(song) }}</h4>
       </div>
     </li>
@@ -33,12 +41,11 @@ export default {
     checkAll() {
       this.songs.map(song => {
         checkUseful({
-            id: song.id
-          })
-          .then(data => {
-            song.useful = data.success;
-          })
-      })
+          id: song.id
+        }).then(data => {
+          song.useful = data.success;
+        });
+      });
     }
   }
 };
@@ -79,6 +86,11 @@ export default {
         color: @color-text-d;
         text-overflow: ellipsis;
         overflow: hidden;
+      }
+    }
+    &:nth-child(-n + 3) {
+      .song-deco-content {
+        color: @color-sub-theme;
       }
     }
   }

@@ -28,7 +28,9 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
-import { loginCell, logout, getLoginStatus, getUserDetail } from 'api/user';
+import {
+  loginCell, logout, getLoginStatus, getUserDetail
+} from 'api/user';
 import { ERR_OK, NEED_LOGIN } from 'api/config';
 import { httpsify } from 'assets/js/util';
 
@@ -38,7 +40,7 @@ export default {
     return {
       user: {},
       level: 0
-    }
+    };
   },
   computed: {
     bgImg() {
@@ -48,7 +50,7 @@ export default {
       return `background-image: url(${httpsify(this.user.avatarUrl)})`;
     },
     birthday() {
-      let birthday = new Date(this.user.birthday);
+      const birthday = new Date(this.user.birthday);
       return `${birthday.getMonth() + 1}月${birthday.getDate()}日`;
     },
     ...mapGetters([
@@ -75,20 +77,20 @@ export default {
       }).then(data => {
         this.user = data.profile;
         this.level = data.level;
-      })
+      });
     },
     logout() {
-      logout().then((data) => {
+      logout().then(data => {
         if (data.code === ERR_OK) {
           this.setLoggedin(false);
           this.setUserId(0);
           this.setTips('成功退出账号');
-          
+
           setTimeout(() => {
             this.$router.push('/recommend');
           }, 2000);
         }
-      })
+      });
     },
     ...mapMutations({
       setLoggedin: 'SET_LOGGEDIN',
@@ -96,7 +98,7 @@ export default {
       setTips: 'SET_TIPS'
     })
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

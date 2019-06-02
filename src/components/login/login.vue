@@ -29,14 +29,14 @@ export default {
     selectLoginWay(loginWay) {
       this.$router.push({
         path: '/login/loginways'
-      })
+      });
       this.setLoginWay(loginWay);
     },
     ...mapMutations({
       setLoginWay: 'SET_LOGIN_WAY'
     })
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

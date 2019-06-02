@@ -2,7 +2,7 @@
   <div class="progress-bar">
     <div class="progress-wrapper" @click.stop="click" ref="progressWrapper">
       <div class="progress" ref="progress"></div>
-      <div class="progress-btn-wrapper" 
+      <div class="progress-btn-wrapper"
         @touchstart.prevent="progressTouchStart"
         @touchmove.prevent="progressTouchMove"
         @touchend.prevent="progressTouchEnd"
@@ -26,20 +26,19 @@ export default {
   data() {
     return {
       touch: {}
-    }
+    };
   },
   watch: {
     percent(newPercent) {
-      if (newPercent >= 0 && newPercent <= 1 && !this.touch.init)
-      {
-        this.fresh(newPercent);      
+      if (newPercent >= 0 && newPercent <= 1 && !this.touch.init) {
+        this.fresh(newPercent);
       }
     }
   },
   methods: {
     click(e) {
       // progress 和 progressWrap 原始宽度相同
-      let newPercent = (e.clientX - e.target.getBoundingClientRect().left) / e.target.clientWidth;
+      const newPercent = (e.clientX - e.target.getBoundingClientRect().left) / e.target.clientWidth;
       this.fresh(newPercent);
       this.$emit('percentChange', newPercent);
     },
@@ -53,7 +52,7 @@ export default {
         return;
       }
 
-      let deltaX = (e.touches[0].pageX - this.touch.startX) / this.$refs.progressWrapper.clientWidth;
+      const deltaX = (e.touches[0].pageX - this.touch.startX) / this.$refs.progressWrapper.clientWidth;
       // this.percent += deltaX;
       this.touch.newPercent = this.percent + deltaX;
       this.fresh(this.touch.newPercent);
