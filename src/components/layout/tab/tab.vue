@@ -1,24 +1,31 @@
 <template>
   <div class="tab">
-    <router-link tag="div" class="tab-item" to="/recommend">
-      <span class="tab-link">推荐</span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/singer">
-      <span class="tab-link">歌手</span>
-    </router-link>
-    <router-link tag="div" class="tab-item" to="/dj">
-      <span class="tab-link">电台
-      </span>
+    <router-link
+      v-for="tab of tabs"
+      :key="tab.index"
+      tag="div"
+      class="tab-item"
+      :to="tab.path"
+    >
+      <span class="tab-link">{{ tab.title }}</span>
     </router-link>
   </div>
 </template>
 
 <script>
-export default { };
+import { tabs } from 'assets/js/config';
+
+export default {
+  data() {
+    return {
+      tabs
+    };
+  }
+};
 </script>
 
 <style scoped lang="less">
-@import "~src/assets/style/variable.less";
+@import '~src/assets/style/variable.less';
 
 .tab {
   display: flex;

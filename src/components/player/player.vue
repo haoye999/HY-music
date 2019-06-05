@@ -173,8 +173,8 @@ export default {
       return this.mode === playMode.sequence
         ? 'icon-xunhuan'
         : this.mode === playMode.loop
-          ? 'icon-danquxunhuan'
-          : 'icon-bofangye-caozuolan-suijibofang';
+        ? 'icon-danquxunhuan'
+        : 'icon-bofangye-caozuolan-suijibofang';
     },
     backgroundImage() {
       return `background: center / cover url(${httpsify(
@@ -199,7 +199,8 @@ export default {
      * 随着播放时间更新歌词组件
      */
     updateLyric(currentTime) {
-      const currentIndex = this.lyric.findIndex(item => item.startTime >= currentTime + 0.3) - 1;
+      const currentIndex =
+        this.lyric.findIndex(item => item.startTime >= currentTime + 0.3) - 1;
       this.currentLyricIndex = currentIndex;
 
       const currentIndexTop = Math.max(currentIndex - 5, 0);
@@ -216,21 +217,22 @@ export default {
       this.middleTouch.init = true;
       this.middleTouch.startX = e.touches[0].pageX;
       this.middleTouch.startY = e.touches[0].pageY;
-      this.middleTouch.width = this.$refs.middle.clientWidth / this.$refs.middle.children.length;
+      this.middleTouch.width =
+        this.$refs.middle.clientWidth / this.$refs.middle.children.length;
     },
     /**
      * touchmove 回调
      */
     middleTouchMoveHandle(e) {
-      const deltaX = e.touches[0].pageX - this.middconstouch.startX;
+      const deltaX = e.touches[0].pageX - this.middleTouch.startX;
       const deltaY = e.touches[0].pageY - this.middleTouch.startY;
 
       if (!this.middleTouch.init || Math.abs(deltaX) * 0.5 < Math.abs(deltaY)) {
         return;
       }
 
-      this.$refs.middle.style.transform = `translate3d(${deltaX
-        + this.middleTouch.lastTranslateX}px, 0, 0)`;
+      this.$refs.middle.style.transform = `translate3d(${deltaX +
+        this.middleTouch.lastTranslateX}px, 0, 0)`;
       this.middleTouch.deltaX = deltaX;
     },
     /**
@@ -247,8 +249,8 @@ export default {
 
       this.middleTouch.lastTranslateX = Math.max(
         Math.min(this.middleTouch.lastTranslateX, 0),
-        (-this.$refs.middle.clientWidth / this.$refs.middle.children.length)
-          * (this.$refs.middle.children.length - 1)
+        (-this.$refs.middle.clientWidth / this.$refs.middle.children.length) *
+          (this.$refs.middle.children.length - 1)
       );
 
       this.$refs.middle.style.transition = 'transform .3s';
@@ -381,6 +383,9 @@ export default {
         this.$refs.audio.play();
         this.setPlayingState(true);
       });
+      this.currentSong.checkUseful().catch(e => {
+        this.setTips(e.response.data.message);
+      })
       this.currentSong
         .getLyric()
         .then(data => {

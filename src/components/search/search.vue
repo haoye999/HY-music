@@ -13,8 +13,9 @@
         v-model="keywords"
         autocomplete="off"
       />
+      <hr class="underline" />
       <ul class="search-suggest">
-        <li class="search-suggest-item search-button">搜索{{ keywords }}</li>
+        <li class="search-suggest-item search-button">搜索 "{{ keywords }}"</li>
         <li
           class="search-suggest-item"
           v-for="suggest in suggests"
@@ -105,6 +106,7 @@ export default {
   right: 0;
   bottom: 0;
   z-index: 100;
+  padding: 0 8px;
   background-color: @color-background;
   .back {
     z-index: 100;
@@ -117,26 +119,43 @@ export default {
     margin: 0 0 0 40px;
     height: 40px;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
     position: relative;
+    padding: 0 20px 0 0;
     #search {
       .mixin-input-reset();
       height: 30px;
       width: 100%;
-      margin: 0 30px 0 10px;
-      border-bottom: 1px solid @color-text-d;
       color: @color-text-ll;
+      border-bottom: 1px solid @color-text-d;
       font-size: @font-size-medium-x;
-      &:focus + .search-suggest {
-        opacity: 1;
+      &::-webkit-search-cancel-button {
+        display: none;
       }
+      &:focus {
+        & + .underline {
+          transform: scale(1);
+        }
+        & ~ .search-suggest {
+          opacity: 1;
+        }
+      }
+    }
+    .underline {
+      margin: -1px 0 0 0;
+      border: 0;
+      border-bottom: 1px solid @color-sub-theme;
+      transform: scale(0);
+      transition: transform 0.3s cubic-bezier(1, 0, 0, 1);
     }
     .search-suggest {
       position: absolute;
       top: 40px;
-      left: 10px;
-      width: 295.2px;
+      left: 0;
+      width: 100%;
+      padding: 0 20px 0 0;
+      background-clip: content-box;
       background-color: @color-dialog-background;
       opacity: 0;
       transition: opacity 0.2s ease-out;
@@ -146,13 +165,14 @@ export default {
         position: relative;
         .search-suggest-content {
           display: inline-block;
-          width: 82%;
+          width: 80%;
+          color: @color-text-d;
         }
         &:nth-child(n + 2)::before {
           content: '\e621';
           .iconfont();
           display: inline-block;
-          margin: 0 5px;
+          margin: 0 8px;
         }
         &:nth-child(n + 2)::after {
           content: '\e7c3';
@@ -164,6 +184,7 @@ export default {
       }
       .search-button {
         padding: 0 0 0 10px;
+        color: @color-link;
       }
     }
   }

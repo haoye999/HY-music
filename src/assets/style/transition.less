@@ -1,56 +1,81 @@
 // 根路由动画
-.root-router-fade-enter-active, .root-router-fade-leave-active {
-  transition: opacity .1s ease-out, transform .1s;
+// right to left
+.root-router-r2l-enter-active,
+.root-router-r2l-leave-active,
+.root-router-l2r-enter-active,
+.root-router-l2r-leave-active {
+  transition: transform 0.1s;
 }
-.root-router-fade-enter, .root-router-fade-leave-to {
-  opacity: 0;
-  transform: scale(0.6);
+.root-router-r2l-enter {
+  transform: translate(100%, 0);
+}
+.root-router-r2l-leave-to {
+  transform: translate(-100%, 0);
+}
+
+// 根路由动画
+// left to left
+.root-router-l2r-enter {
+  transform: translate(-100%, 0);
+}
+.root-router-l2r-leave-to {
+  transform: translate(100%, 0);
 }
 
 // 歌手详情页动画
-.singer-detail-router-fade-enter-active, .singer-detail-router-fade-leave-active {
-  transition: all .2s;
+.singer-detail-router-fade-enter-active,
+.singer-detail-router-fade-leave-active {
+  transition: all 0.2s;
 }
 
-.singer-detail-router-fade-enter, .singer-detail-router-fade-leave-to {
+.singer-detail-router-fade-enter,
+.singer-detail-router-fade-leave-to {
   transform: translate(100%, 0) scale(0);
   opacity: 0;
 }
 
-.bottom-in-out-enter-active, .bottom-in-out-leave-active {
-  transition: all .2s;
+.bottom-in-out-enter-active,
+.bottom-in-out-leave-active {
+  transition: all 0.2s;
   .main-content {
-    transition: all .2s;  
+    transition: all 0.2s;
   }
 }
 
-.bottom-in-out-enter, .bottom-in-out-leave-to {
+.bottom-in-out-enter,
+.bottom-in-out-leave-to {
   background: rgba(0, 0, 0, 0) !important;
   .main-content {
     transform: translate3d(0, 100%, 0);
   }
 }
 
-.tips-enter-active, .tips-leave-active {
-  transition: all .2s;
+.tips-enter-active,
+.tips-leave-active {
+  transition: all 0.2s;
 }
 
-.tips-enter, .tips-leave-to {
+.tips-enter,
+.tips-leave-to {
   transform: translate3d(0, -100%, 0);
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: all .5s;
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
-.right-in-out-enter-active, .right-in-out-leave-active {
-  transition: all .2s;
+.right-in-out-enter-active,
+.right-in-out-leave-active {
+  transition: all 0.2s;
 }
 
-.right-in-out-enter, .right-in-out-leave-to {
+.right-in-out-enter,
+.right-in-out-leave-to {
   transform: translate3d(100%, 0, 0);
 }

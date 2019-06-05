@@ -2,7 +2,7 @@
   <div id="app">
     <m-header @openSearch="handleOpenSearch" />
     <tab />
-    <transition name="root-router-fade" mode="out-in">
+    <transition :name="rootRouteDirection" mode="out-in">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -24,6 +24,7 @@ import Player from 'components/player/player.vue';
 import Search from 'components/search/search.vue';
 
 import { mapGetters, mapMutations } from 'vuex';
+import { tabs } from 'assets/js/config';
 import { getLoginStatus } from 'api/user';
 import { ERR_OK, NEED_LOGIN } from 'api/config';
 
@@ -31,7 +32,8 @@ export default {
   name: 'App',
   data() {
     return {
-      openSearch: false
+      openSearch: false,
+      rootRouteDirection: 'root-router-l2r'
     };
   },
   components: {
@@ -80,6 +82,17 @@ export default {
           this.setTips('');
         }, 2000);
       }
+    },
+    $route(to, from, next) {
+      const fromIndex = tabs.findIndex(
+        tab => tab.path === '/' + from.path.split('/').pop()
+      );
+      const toIndex = tabs.findIndex(
+        tab => tab.path === '/' + to.path.split('/').pop()
+      );
+
+      this.rootRouteDirection =
+        fromIndex > toIndex ? 'root-router-l2r' : 'root-router-r2l';
     }
   }
 };
